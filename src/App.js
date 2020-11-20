@@ -1,24 +1,42 @@
 import logo from './logo.svg';
 import './App.css';
-
+import MainPage from  './components/mainpage.js'
+import LoginPage from  './components/loginpage.js'
+import {
+  Redirect,
+  HashRouter,
+  Route,
+} from "react-router-dom";
+import RegisterPage from './components/registerpage';
+import axios from 'axios';
+import React, { useState } from 'react';
 function App() {
+  const [isLogin, setIslogin] = useState(true);
+  function IsLogin(){
+      console.log('check login')
+      axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
+            if (Response.data){
+              setIslogin(true)
+            }
+            else{
+              setIslogin(false)
+            }
+      })
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <HashRouter>
+         <Route exact  path="/" >
+          
+           {isLogin? <MainPage></MainPage>:  <Redirect to ='/login'></Redirect>}
+          
+         </Route>
+         <Route   path="/login" component={LoginPage}>
+         </Route>
+         <Route   path="/register" component={RegisterPage}>
+         </Route>
+      </HashRouter>
+    
+    
   );
 }
 

@@ -1,0 +1,178 @@
+.mainlayout{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    @media (prefers-reduced-motion: no-preference) {
+        .statusboxrunning {
+          animation: runninglogo infinite 2s linear;
+        }
+      }
+    @keyframes runninglogo {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    .navheader{
+        
+        display: flex;
+        height: 48px;
+        background-color: #0078D4;
+        .centerHeader{
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            height: 100%;
+            .statusbox{
+                display: flex;
+                padding: 0px 12px 0px 12px;
+                border-radius: 2px;
+                height: 32px;
+                opacity: 0.8;
+                background-color: white;
+                line-height: 30px;
+            }
+            .statusboxactive{
+                display: flex;
+                border-radius: 2px;
+                line-height: 30px;
+                margin:4px;
+                padding: 0px 12px 0px 12px;
+                height: 32px;
+                background-color: #F1F500;
+            }
+        }
+    }
+    .headerButton{
+        min-width: 48px;
+        height: 48px;
+        background-color: #0078D4;
+        display: flex;
+        cursor: pointer;
+        white-space: nowrap;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .headerButtonText{
+        white-space: nowrap;
+        border-right: 1px solid rgba(255, 255, 255, 0.082);
+        padding: 0px 12px 0px 12px;
+        height: 48px;
+        background-color: #0078D4;
+        display: flex;
+        align-items: center;
+        color: white;
+        cursor: pointer;
+        user-select: none;
+        
+    }
+    .disabled{            
+        opacity: 0.3;
+        cursor: default;
+    }
+    .headerButtonText:hover{
+        background-color: #005A9E;
+        border-right: 1px solid #005A9E;
+    }
+    .headerButtonText:active{
+        background-color: #004578;
+
+        border-right: 1px solid #005A9E;
+    }
+    .headerButton:hover{
+        background-color: #005A9E;
+    }
+    .headerButton:active{
+        background-color: #004578;
+    }
+    .stringIcon{
+        margin: auto;
+    }
+    .personaContainer{
+        display: flex;
+        align-items: center;
+        margin: 0px 12px;
+        .personaIcon{
+            border: 2px solid rgb(0, 53, 133);
+            width: 36px;
+            height: 36px;
+            background-color: #ffffff6c;
+            border-radius: 50%;
+        }
+        .personaDescription{
+            .header{
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                color: #ffffff;
+            }
+            .description{
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+                color: #ffffffef;
+            }
+            margin-left: 12px;
+            height: 36px;
+           
+        }
+    }
+    
+    .rightHeader{
+        margin-right: 0px;
+        margin-left: auto;
+        display: flex;
+    }
+    .leftHeader{
+        margin-left: 0px;
+        margin-right: auto;
+        display: flex;
+    }
+    .contentContainer{
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        .leftcontent
+        {
+             width: auto;  
+        }
+        .centercontent{
+            display: flex;
+            flex: 1;
+            align-items: center;
+            flex-direction: column;
+            border-right: 1px solid #EDEBE9;
+            border-left: 1px solid  #EDEBE9;
+            .count{
+                margin-top: 20px;
+                margin-bottom:20px;
+                width: 100%;
+               display: flex;
+               .col{
+                   display: flex;
+                   flex-direction: column;
+                   flex: 50%;
+                   text-align: center;
+               }
+               
+            }
+            .image{
+
+            }
+        }
+        .rightcontent{
+            width: auto;
+            margin-right: 0px;
+            margin-left: auto;
+        }   
+    }
+}
