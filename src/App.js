@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import MainPage from  './components/mainpage.js'
 import LoginPage from  './components/loginpage.js'
+import ReportPage from './components/reportpage.js'
+
 import {
   Redirect,
   HashRouter,
@@ -33,6 +35,8 @@ function App() {
          <Route   path="/login" component={LoginPage}>
          </Route>
          <Route   path="/register" component={RegisterPage}>
+         </Route>
+         <Route   path="/report" component={ReportPage}>
          </Route>
       </HashRouter>
     
