@@ -1,0 +1,217 @@
+.mainlayout{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    .navheader{
+        
+        display: flex;
+        height: 48px;
+        background-color: #0078D4;
+        .centerHeader{
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            height: 100%;
+            .statusbox{
+                display: flex;
+                padding: 0px 12px 0px 12px;
+                border-radius: 2px;
+                height: 32px;
+                // width: 100px;
+                margin: 4px;
+                opacity: 0.8;
+                background-color: white;
+                line-height: 30px;
+            }
+            .statusboxactive{
+                display: flex;
+                border-radius: 2px;
+                line-height: 30px;
+                // width: 100px;
+                margin:4px;
+                padding: 0px 12px 0px 12px;
+                height: 32px;
+                background-color: #F1F500;
+            }
+            .dropdown{
+                margin: 5px;
+                display: flex;
+                align-items: center;
+                height: 80%;
+                width: auto;
+                /* Grey palette / White */
+        
+                background: #FFFFFF;
+                opacity: 0.8;
+                border-radius: 4px;
+            }
+        }
+        
+    }
+    .headerButton{
+        min-width: 48px;
+        height: 48px;
+        background-color: #0078D4;
+        display: flex;
+        cursor: pointer;
+        white-space: nowrap;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .headerButtonText{
+        white-space: nowrap;
+        border-right: 1px solid rgba(255, 255, 255, 0.082);
+        padding: 0px 12px 0px 12px;
+        height: 48px;
+        background-color: #0078D4;
+        display: flex;
+        align-items: center;
+        color: white;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .disabled{            
+        opacity: 0.3;
+        cursor: default;
+    }
+    .headerButtonText:hover{
+        background-color: #005A9E;
+        border-right: 1px solid #005A9E;
+    }
+    .headerButtonText:active{
+        background-color: #004578;
+
+        border-right: 1px solid #005A9E;
+    }
+    .headerButton:hover{
+        background-color: #005A9E;
+    }
+    .headerButton:active{
+        background-color: #004578;
+    }
+    .stringIcon{
+        margin: auto;
+    }
+    .personaContainer{
+        display: flex;
+        align-items: center;
+        margin: 0px 12px;
+        .personaIcon{
+            border: 2px solid rgb(0, 53, 133);
+            width: 36px;
+            height: 36px;
+            background-color: #ffffff6c;
+            border-radius: 50%;
+        }
+        .personaDescription{
+            .header{
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                color: #ffffff;
+            }
+            .description{
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 12px;
+                line-height: 16px;
+                color: #ffffffef;
+            }
+            margin-left: 12px;
+            height: 36px;
+           
+        }
+    }
+    
+    .rightHeader{
+        margin-right: 0px;
+        margin-left: auto;
+        display: flex;
+    }
+    .leftHeader{
+        margin-left: 0px;
+        margin-right: auto;
+        display: flex;  
+        .searchBox{
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+            height: auto;
+            width: 500px;
+            /* Grey palette / White */
+    
+            background: #FFFFFF;
+            opacity: 0.8;
+            border-radius: 4px;
+            .searchIcon{
+                margin-left: 12px;
+                /* Fabric Icons / 16 */
+
+                font-family: Full MDL2 Assets;
+                font-size: 16px;
+                line-height: 100%;
+                /* or 16px */
+
+                display: flex;
+                align-items: center;
+                text-align: center;
+
+                color: #004578;
+            }
+            .searchText{
+                margin: 7px 0px 5px 8px;
+
+                /* SegoeUI Regular / 14 - ms-fontSize-14 FontSizes.size14 */
+
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                /* identical to box height, or 143% */
+
+
+                color: #004578;
+            }
+        } 
+    }
+    .contentContainer{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        .textContent{
+            font-size: small;
+            margin: 0px;
+        }
+        .tableContent{
+            margin: 5px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: scroll;
+        }
+        .pane{
+            margin-bottom: 5px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            // overflow: scroll;
+            position: relative;
+        }
+    }
+}
