@@ -4,6 +4,7 @@ import { TextField, MaskedTextField } from 'office-ui-fabric-react/lib/TextField
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens,Modal } from 'office-ui-fabric-react';
 import { Link, Text } from 'office-ui-fabric-react';
+
 import axios from 'axios';
 
 
@@ -23,11 +24,6 @@ class RegisterPage extends Component {
         }
     }
     handleSubmit(event) {
-        
-        console.log(event.target.username.value)
-        console.log(event.target.fullname.value)
-        console.log(event.target.password1.value)
-        console.log(event.target.password2.value)
         event.preventDefault();
         const formdata= new FormData();
         formdata.set('data','data')

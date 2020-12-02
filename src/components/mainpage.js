@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import './mainpage.scss';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton, Stack, IStackTokens ,Modal} from 'office-ui-fabric-react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn,SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import { Icon } from '@fluentui/react/lib/Icon';
+import NewImportSession from './newimportsession'
 class MainPage extends Component {
     constructor(props) {
 
         super(props);
         this.state = {
+            modalOpen:true,
             user:{username:'',name:'',role:''},  
             items:[
             {key:1,name:'Mã lô dừa',value:2},
@@ -78,9 +80,12 @@ class MainPage extends Component {
     render() { 
         return ( 
             <div className='mainlayout'>
+                <Modal isOpen={this.state.modalOpen} on>
+                    <NewImportSession onclose={(e)=> {this.setState({modalOpen:false})}}></NewImportSession>
+                </Modal>
                 <div className='navheader'>
                     <div className="leftHeader">
-                        <div className='headerButtonText'>
+                        <div className='headerButtonText' onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}}>
                             Nhập kho mới
                         </div>
                         <div className='headerButtonText' >
