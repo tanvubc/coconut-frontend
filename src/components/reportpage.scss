@@ -4,7 +4,6 @@
     height: 100vh;
     flex-direction: column;
     .navheader{
-        
         display: flex;
         height: 48px;
         background-color: #0078D4;
@@ -14,27 +13,6 @@
             margin-right: auto;
             align-items: center;
             height: 100%;
-            .statusbox{
-                display: flex;
-                padding: 0px 12px 0px 12px;
-                border-radius: 2px;
-                height: 32px;
-                // width: 100px;
-                margin: 4px;
-                opacity: 0.8;
-                background-color: white;
-                line-height: 30px;
-            }
-            .statusboxactive{
-                display: flex;
-                border-radius: 2px;
-                line-height: 30px;
-                // width: 100px;
-                margin:4px;
-                padding: 0px 12px 0px 12px;
-                height: 32px;
-                background-color: #F1F500;
-            }
             .dropdown{
                 margin: 5px;
                 display: flex;
@@ -194,15 +172,15 @@
             font-size: small;
             margin: 0px;
         }
-        .tableContent{
-            margin: 5px;
-            height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: scroll;
-        }
+        // .tableContent{
+        //     margin: 5px;
+        //     height: 250px;
+        //     display: flex;
+        //     flex-direction: column;
+        //     justify-content: center;
+        //     align-items: center;
+        //     overflow: scroll;
+        // }
         .pane{
             margin-bottom: 5px;
             height: 250px;
