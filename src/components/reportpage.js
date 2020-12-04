@@ -14,7 +14,7 @@ import { IDetailsColumnRenderTooltipProps } from 'office-ui-fabric-react/lib/Det
 import onRenderDetailsHeader from './renderheader'
 
 
-const DayPickerStrings: IDatePickerStrings = {
+const DayPickerStrings = {
     months: [
       'January',
       'February',
@@ -121,7 +121,7 @@ class ReportPage extends React.Component{
     
     render(){
         return(
-            <div className='mainlayout'>
+            <div className='reportpage'>
                 <div className='navheader'>
                     <div className="leftHeader">
                         <div className='headerButtonText'>
