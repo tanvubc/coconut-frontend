@@ -1,8 +1,7 @@
 import React from 'react'
 import {Label,PrimaryButton, DatePicker, DayOfWeek, IDatePickerStrings,Icon, SearchBox} from '@fluentui/react';
 import './reportpage.scss'
-import {DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, Selection, ConstrainMode, IDetailsFooterProps, DetailsRow,
-} from 'office-ui-fabric-react/lib/DetailsList';
+import {DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, Selection, ConstrainMode, IDetailsFooterProps, DetailsRow,} from 'office-ui-fabric-react/lib/DetailsList';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -71,7 +70,7 @@ class ReportPage extends React.Component{
             items:[ 
             {key:1,name:'abc',value:2},
             {key:2,name:'abc',value:2},
-            {key:3,name:'abc',value:2},
+            {key:3,name:'abc00000000000000000000000000',value:2},
             {key:4,name:'abc',value:2},
             {key:5,name:'abc',value:2},
             {key:6,name:'abc',value:2},
@@ -98,14 +97,30 @@ class ReportPage extends React.Component{
             ], 
             }
         this._columns = [
-            { key: 'column1', name: 'Mã lô dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column1', name: 'Ngày nhập kho', fieldName: 'name', minWidth: 100,  isResizable: true },
             { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'name', minWidth: 100,  isResizable: true },
             { key: 'column3', name: 'Nhân viên thủ kho', fieldName: 'name', minWidth: 100,  isResizable: true },
-            { key: 'column4', name: 'Tiêu chuẩn', fieldName: 'name', minWidth: 100, isResizable: true },
-            { key: 'column5', name: 'Loại dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
-            { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'name', minWidth: 100,  isResizable: true },
-            { key: 'column7', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
-            { key: 'column8', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column4', name: 'Loại dừa', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column5', name: 'Vùng thu mua', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column6', name: 'Hình thức mua bán', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column7', name: 'Nhà cung cấp', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column8', name: 'Hình thức lên dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column9', name: 'Quy cách đếm', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column10', name: 'Thời gian NNC đến', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column11', name: 'Thời gian bắt đầu nhập kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column12', name: 'Thời gian kết thúc nhập kho', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column13', name: 'Số lượng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column14', name: 'Mã lô kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column15', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column16', name: 'Mã niêm phong bắt đầu', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column17', name: 'Mã niêm phong kết thúc', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column18', name: 'Dừa nhỏ', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column19', name: 'Dừa hư, úng màu, mọng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column20', name: 'Dừa trăng ăn, điếc, dừa me', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column21', name: 'Phân/Đất lẫn trên dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column22', name: 'Tình trạng niêm phong', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column23', name: 'Tình trạng vệ sinh', fieldName: 'name', minWidth: 100,  isResizable: true },
+            
         ];
         this._columns2 = [
             { key: 'column1', name: 'Đơn vị vận chuyển', fieldName: 'name', minWidth: 100, isResizable: true },
@@ -116,12 +131,29 @@ class ReportPage extends React.Component{
             { key: 'column6', name: 'Số lượng', fieldName: 'name', minWidth: 100, isResizable: true },
             { key: 'column7', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
             { key: 'column8', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column1', name: 'Đơn vị vận chuyển', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column2', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column3', name: 'Băng tải lên dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column4', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column5', name: 'Khối lượng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column6', name: 'Số lượng', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column7', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column8', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column1', name: 'Đơn vị vận chuyển', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column2', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column3', name: 'Băng tải lên dừa', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column4', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column5', name: 'Khối lượng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column6', name: 'Số lượng', fieldName: 'name', minWidth: 100, isResizable: true },
+            { key: 'column7', name: 'Vùng', fieldName: 'name', minWidth: 100,  isResizable: true },
+            { key: 'column8', name: 'Vị trí lưu kho', fieldName: 'name', minWidth: 100,  isResizable: true },
+
         ];
     }
     
     render(){
         return(
-            <div className='mainlayout'>
+            <div className='reportpage'>
                 <div className='navheader'>
                     <div className="leftHeader">
                         <div className='headerButtonText'>
@@ -187,7 +219,7 @@ class ReportPage extends React.Component{
                             columns={this._columns2}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}
-                            constrainMode={ConstrainMode.horizontalConstrained}
+                            constrainMode={ConstrainMode.unconstrained}
                             onRenderDetailsHeader={onRenderDetailsHeader}
                         />
                     </ScrollablePane>

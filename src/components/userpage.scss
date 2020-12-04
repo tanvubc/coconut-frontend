@@ -1,4 +1,4 @@
-.mainlayout{
+.userpage{
     display: flex;
     width: 100%;
     height: 100vh;
@@ -74,6 +74,7 @@
         color: white;
         cursor: pointer;
         user-select: none;
+        
     }
     .disabled{            
         opacity: 0.3;
@@ -140,43 +141,66 @@
         margin-left: 0px;
         margin-right: auto;
         display: flex;
+        .headerTitle{
+            white-space: nowrap;
+            // border-right: 1px solid rgba(255, 255, 255, 0.082);
+            padding: 0px 12px 0px 12px;
+            height: 48px;
+            background-color: #0078D4;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 1);
+            // cursor: pointer;
+            user-select: none;
+            font-size: large;
+        }
     }
     .contentContainer{
         flex: 1;
         display: flex;
-        flex-direction: row;
-        .leftcontent
-        {
-             width: auto;  
-        }
-        .centercontent{
-            display: flex;
+        flex-direction: column;
+        .contentHeader{
             flex: 1;
-            align-items: center;
-            flex-direction: column;
-            border-right: 1px solid #EDEBE9;
-            border-left: 1px solid  #EDEBE9;
-            .count{
-                margin-top: 20px;
-                margin-bottom:20px;
-                width: 100%;
-               display: flex;
-               .col{
-                   display: flex;
-                   flex-direction: column;
-                   flex: 50%;
-                   text-align: center;
-               }
-               
+            display: flex;
+            flex-direction: row;
+            height: 60px;
+            .searchIcon{
+                margin-left: 0px;
+                // /* Fabric Icons / 16 */
+                font-family: Full MDL2 Assets;
+                font-size: 16px;
+                line-height: 100%;
+                /* or 16px */
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #ffffff;
             }
-            .image{
-
+            .searchText{
+                margin: 7px 0px 5px 8px;
+                /* SegoeUI Regular / 14 - ms-fontSize-14 FontSizes.size14 */
+                font-family: Segoe UI;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 14px;
+                line-height: 20px;
+                /* identical to box height, or 143% */
+                // color: #ffffff;
             }
         }
-        .rightcontent{
-            width: auto;
-            margin-right: 0px;
-            margin-left: auto;
-        }   
+        .pane{
+            margin-top: 120px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+            height: auto;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            // overflow: scroll;
+            // position: relative;
+        }
     }
 }

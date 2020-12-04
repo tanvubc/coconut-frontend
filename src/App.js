@@ -3,6 +3,7 @@ import './App.css';
 import MainPage from  './components/mainpage.js'
 import LoginPage from  './components/loginpage.js'
 import ReportPage from './components/reportpage.js'
+import UserPage from './components/userpage.js'
 
 import {
   Redirect,
@@ -37,6 +38,8 @@ function App() {
          <Route   path="/register" component={RegisterPage}>
          </Route>
          <Route   path="/report" component={ReportPage}>
+         </Route>
+         <Route   path="/user" component={UserPage}>
          </Route>
       </HashRouter>
     
