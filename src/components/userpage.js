@@ -18,7 +18,7 @@ import onRenderDetailsHeader from './renderheader'
     
 
 class UserPage extends Component {
-    _selection: Selection;
+ 
     constructor(props) {
 
         super(props);
@@ -45,10 +45,11 @@ class UserPage extends Component {
 
         ];
         this.onRemoveRow=this.onRemoveRow.bind(this)
+        this._selection = new Selection({
+            onSelectionChanged: this._onItemsSelectionChanged,
+          })
     }
-    _selection = new Selection({
-        onSelectionChanged: this._onItemsSelectionChanged,
-      })
+    
     componentDidMount(){
         axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
             if (Response.data){
@@ -64,6 +65,25 @@ class UserPage extends Component {
                 window.location.href='/#/login'
             }
       })
+      axios.get('http://localhost:9000/api/user/GetUserList').then((Response)=>{
+            if (Response.data){
+                const userlist= Response.data.map((value,index)=>{
+                    return (
+                    {
+                        key:index,
+                        userName:value.Username,
+                        lastLogin:value.LastLogin,
+                        createdDate:value.DateCreated,
+                        role:value.Role.Name,
+                        firstName:value.Name
+                    }
+                    )
+                })
+                this.setState({items:userlist})
+            }
+           
+      })
+
     }
     onRemoveRow(){
         this.setState(prevState => {
