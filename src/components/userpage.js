@@ -19,6 +19,7 @@ import onRenderDetailsHeader from './renderheader'
 
 class UserPage extends Component {
     _selection: Selection;
+    
     constructor(props) {
 
         super(props);
@@ -32,24 +33,47 @@ class UserPage extends Component {
                 activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
                 {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
                 activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-            ]    
+                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
+                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
+                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
+                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
+                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+            ], 
+            itemsRender:''
         }
         this._columns = [
-            { key: 'column1', name: 'Tên đăng nhập', fieldName: 'userName', minWidth: 100, maxWidth:200,  isResizable: true },
-            { key: 'column2', name: 'Họ', fieldName: 'firstName', minWidth: 100, maxWidth:200,  isResizable: true },
-            { key: 'column3', name: 'Tên', fieldName: 'lastName', minWidth: 100, maxWidth:200,  isResizable: true },
-            { key: 'column4', name: 'Quyền', fieldName: 'role', minWidth: 100, maxWidth:200, isResizable: true },
-            { key: 'column5', name: 'Trạng thái hoạt động', fieldName: 'activeStatus', minWidth: 100, maxWidth:200,  isResizable: true },
-            { key: 'column6', name: 'Đăng nhập lần cuối', fieldName: 'lastLogin', minWidth: 100, maxWidth:200,  isResizable: true },
-            { key: 'column7', name: 'Ngày tạo tài khoản', fieldName: 'createdDate', minWidth: 100, maxWidth:200,  isResizable: true },
+            { key: 'column1', name: 'Tên đăng nhập', fieldName: 'userName', minWidth: 100, maxWidth:130,  isResizable: true },
+            { key: 'column2', name: 'Họ', fieldName: 'firstName', minWidth: 100, maxWidth:130,  isResizable: true },
+            { key: 'column3', name: 'Tên', fieldName: 'lastName', minWidth: 100, maxWidth:130,  isResizable: true },
+            { key: 'column4', name: 'Quyền', fieldName: 'role', minWidth: 100, maxWidth:130, isResizable: true },
+            { key: 'column5', name: 'Trạng thái hoạt động', fieldName: 'activeStatus', minWidth: 140, maxWidth:200,  isResizable: true },
+            { key: 'column6', name: 'Đăng nhập lần cuối', fieldName: 'lastLogin', minWidth: 130, maxWidth:200,  isResizable: true },
+            { key: 'column7', name: 'Ngày tạo tài khoản', fieldName: 'createdDate', minWidth: 150, maxWidth:200,  isResizable: true },
 
         ];
         this.onRemoveRow=this.onRemoveRow.bind(this)
+        this.onUserNameTextChange=this.onUserNameTextChange.bind(this)
+        this.onFirstNameTextChange=this.onFirstNameTextChange.bind(this)
+        this.state.itemsRender=this.state.items
     }
     _selection = new Selection({
         onSelectionChanged: this._onItemsSelectionChanged,
       })
     componentDidMount(){
+        
         axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
             if (Response.data){
                 axios.get('http://localhost:9000/api/user/CurrentUser').then((Respone1)=>{
@@ -65,10 +89,27 @@ class UserPage extends Component {
             }
       })
     }
+    onUserNameTextChange(_,text) {
+        return(
+        this.setState((prevState)=>{
+            return(
+                {itemsRender: prevState.items.filter(item => item.userName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
+            )
+        }))
+    }
+    onFirstNameTextChange(_,text) {
+        return(
+        this.setState((prevState)=>{
+            return(
+                {itemsRender: prevState.items.filter(item => item.lastName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
+            )
+        }))
+    }
     onRemoveRow(){
         this.setState(prevState => {
             return {
                 items: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
+                itemsRender: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
             }
         }) 
     }
@@ -86,13 +127,15 @@ class UserPage extends Component {
     _onItemInvoked(item) {
         alert(`Item invoked: ${item.name}`);
       };
-    render() { 
+    
+    render() {
+        
         return ( 
             <div className='userpage'>
                 <div className='navheader'>
                     <div className='leftHeader'>
                         <Label className='headerTitle'>
-                            User Management
+                            Quản lý người dùng
                         </Label>
                     </div>
                     <div className="rightHeader">
@@ -122,34 +165,26 @@ class UserPage extends Component {
                 <div className='contentContainer'>
                     <div className='contentHeader'>
                         <div style={{paddingLeft:'50px'}}></div>
-                        <TextField style={{marginLeft:'0px', marginRight:'auto'}} label="Username:" placeholder='Username' />
+                        <TextField style={{marginLeft:'0px', marginRight:'auto'}} 
+                                    onChange={this.onUserNameTextChange} label="Tên đăng nhập:" 
+                                    placeholder='vd: user1' />
                         <div style={{paddingLeft:'20px'}}></div>
-                        <TextField label="First Name:" placeholder='First Name' />
+                        <TextField label="Tên:" onChange={this.onFirstNameTextChange} placeholder='vd: Văn A' />
                         <div style={{paddingLeft:'20px'}}></div>
-                        <PrimaryButton style={{margin:'29px 0 0 0', width: '130px'}}>
-                            <Icon iconName='search'/>
-                            <div className='searchText'>Search</div>
-                        </PrimaryButton>
-                        <div style={{paddingLeft:'20px'}}></div>
-                        <PrimaryButton style={{margin:'29px 0 0 0', width: '130px'}}>
-                            <Icon iconName='Settings'/>
-                            <div className='searchText'>Advanced</div>
-                        </PrimaryButton>
-                        <div style={{paddingLeft:'20px'}}></div>
-                        <DefaultButton onClick={this.onRemoveRow} style={{margin:'29px 0 0 0', width: '130px'}}>
+                   
+                        
+                        <PrimaryButton text = 'Xóa' onClick={this.onRemoveRow} style={{margin:'29px 0 0 0', width: '100px'}}>
                             <Icon iconName='Delete'/>
-                            <div className='searchText'>Remove</div>
-                        </DefaultButton>
+                        </PrimaryButton>
                         <div style={{paddingLeft:'20px'}}></div>
-                        <DefaultButton href='/#register' style={{margin:'29px 0 0 0', width: '130px'}}>
+                        <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
                             <Icon iconName='Add'/>
-                            <div className='searchText'>Add</div>
-                        </DefaultButton>  
+                        </PrimaryButton>  
                     </div>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList
                             selection={this._selection}
-                            items={this.state.items}
+                            items={this.state.itemsRender}
                             columns={this._columns}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}
