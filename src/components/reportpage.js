@@ -13,7 +13,7 @@ import { IDetailsColumnRenderTooltipProps } from 'office-ui-fabric-react/lib/Det
 import onRenderDetailsHeader from './renderheader'
 
 
-const DayPickerStrings: IDatePickerStrings = {
+const DayPickerStrings = {
     months: [
       'January',
       'February',
