@@ -12,6 +12,7 @@
     "custom-electron-titlebar": "^3.2.5",
     "electron-is-dev": "^1.2.0",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "node-sass": "4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

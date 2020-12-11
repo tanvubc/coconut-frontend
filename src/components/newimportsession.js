@@ -23,7 +23,8 @@ class NewImportSession extends Component {
             Standard:undefined,
             ConveyorID:undefined,
             Region:undefined,
-            Transporter:undefined
+            Transporter:undefined,
+            ImportCode:undefined
 
         }
         
@@ -58,7 +59,8 @@ class NewImportSession extends Component {
             Standard:this.state.Standard,
             ConveyorID:this.state.ConveyorID,
             Region:this.state.Region,
-            Transporter:this.state.Transporter
+            Transporter:this.state.Transporter,
+            ImportCode:this.state.ImportCode
             }),{
             headers: {
             'Content-Type':'application/json',
