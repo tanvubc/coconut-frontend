@@ -20,7 +20,22 @@ class ConveyorControl extends Component {
          }
     }
     handleStart(value){
-        this.setState({isload:true})
+        if (value===1){
+            axios.get(this.props.url+'/api/plc/runcv1').then((Response)=>{
+                this.setState({isload:false})
+            })
+            this.setState({isload:true})
+        }
+        
+    }
+    handleStop(value){
+        if (value===1){
+            axios.get(this.props.url+'/api/plc/stopcv1').then((Response)=>{
+                this.setState({isload:false})
+            })
+            this.setState({isload:true})
+        }
+        
     }
     render() { 
         return ( 
@@ -41,15 +56,15 @@ class ConveyorControl extends Component {
                 <PrimaryButton  iconProps={{iconName:'Play'}} filled text='Chạy' onClick={(e)=>{e.preventDefault(); this.handleStart(1)}} >
                
                 </PrimaryButton>
-                <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStart(1)}} ></PrimaryButton>
+                <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStop(1)}} ></PrimaryButton>
                 </Stack>
                 <Stack tokens={{childrenGap:12}} horizontal style={{alignItems:'center'}}>
                     <div>
                     Băng tải 2
                     </div>
                     
-                <PrimaryButton iconProps={{iconName:'Play'}} filled text='Chạy' onClick={(e)=>{e.preventDefault(); this.handleStart(1)}} ></PrimaryButton>
-                <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStart(1)}} ></PrimaryButton>
+                <PrimaryButton iconProps={{iconName:'Play'}} filled text='Chạy' onClick={(e)=>{e.preventDefault(); this.handleStart(2)}} ></PrimaryButton>
+                <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStop(2)}} ></PrimaryButton>
                 </Stack>
                 </Stack>
                 }
