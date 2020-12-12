@@ -32,7 +32,7 @@ class NewImportSession extends Component {
         this.conveyoroption=[{key:0,text:'Băng tải 1'},{key:1,text:'Cả 2 băng tải'}]
     }
     onUpdate(){
-        axios.get('http://localhost:9000/api/data/GetOperationUsers','',{
+        axios.get(this.props.url+'/api/data/GetOperationUsers','',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
@@ -52,7 +52,7 @@ class NewImportSession extends Component {
     handleSubmit(e){
         e.preventDefault();
         console.log('aaa')
-        axios.post('http://localhost:9000/api/data/NewImportSession',JSON.stringify({
+        axios.post(this.props.url+'/api/data/NewImportSession',JSON.stringify({
             BuyerUserID:this.state.buyeruserID,
             WarehouseUserID:this.state.importuserID,
             CoconutType:this.state.CoconutType,

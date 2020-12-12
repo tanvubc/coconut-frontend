@@ -51,9 +51,9 @@ class UserPage extends Component {
     }
     
     componentDidMount(){
-        axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
+        axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
             if (Response.data){
-                axios.get('http://localhost:9000/api/user/CurrentUser').then((Respone1)=>{
+                axios.get(this.props.url+'/api/user/CurrentUser').then((Respone1)=>{
                     if(Respone1.data)
                     {
                         console.log(Respone1.data)
@@ -65,7 +65,7 @@ class UserPage extends Component {
                 window.location.href='/#/login'
             }
       })
-      axios.get('http://localhost:9000/api/user/GetUserList').then((Response)=>{
+      axios.get(this.props.url+'/api/user/GetUserList').then((Response)=>{
             if (Response.data){
                 const userlist= Response.data.map((value,index)=>{
                     return (
@@ -95,7 +95,7 @@ class UserPage extends Component {
 
     handleLogout(e){
         e.preventDefault();  
-        axios.post('http://localhost:9000/api/user/Logout','',{
+        axios.post(this.props.url+'/api/user/Logout','',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"

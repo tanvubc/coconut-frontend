@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import './mainpage.scss';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens ,Modal,IconButton} from 'office-ui-fabric-react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn,SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import axios from 'axios'
 import { Icon } from '@fluentui/react/lib/Icon';
 import NewImportSession from './newimportsession'
@@ -60,11 +61,23 @@ class MainPage extends Component {
         this.handleClickBelt1=this.handleClickBelt1.bind(this)
         this.handleClickBelt2=this.handleClickBelt2.bind(this)
     }
+    CheckLogin(){
+        console.log('check login')
+      axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
+            if (Response.data){
+              
+            }
+            else{
+                //this.props.history.push('/login')
+            }
+      })
+    }
     
     componentDidMount(){
-        axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
+        this.CheckLogin();
+        axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
             if (Response.data){
-                axios.get('http://localhost:9000/api/user/CurrentUser').then((Respone1)=>{
+                axios.get(this.props.url+'/api/user/CurrentUser').then((Respone1)=>{
                     if(Respone1.data)
                     {
                         console.log(Respone1.data)
@@ -73,27 +86,43 @@ class MainPage extends Component {
                 })
             }
             else{
-                window.location.href='/#/login'
+                //window.location.href='/#login'
             }
       })
       
       setInterval(()=>{
         //get count
-        axios.get('http://localhost:9000/api/inspection/GetCount',{timeout:'200'}).then((Response)=>{
+        axios.get(this.props.url+'/api/inspection/GetCount',{timeout:'500'}).then((Response)=>{
             this.setState({count:Response.data})
         }).catch((error)=>{})
         //get weight
-        axios.get('http://localhost:9000/api/plc/Get_Weight_Value',{timeout:'200'}).then((Response)=>{
+        axios.get(this.props.url+'/api/plc/Get_Weight_Value',{timeout:'500'}).then((Response)=>{
             this.setState({weight:Response.data})
         }).catch((error)=>{})
-        axios.get('http://localhost:9000/api/inspection/GetConveyorStatus1',{timeout:'200'}).then((Response)=>{
-            this.setState({conveyor1:Response.data})
+        axios.get(this.props.url+'/api/inspection/GetConveyorStatus1',{timeout:'500'}).then((Response)=>{
+            if(Response.data===this.state.conveyor1){
+
+            } else {
+                this.setState({conveyor1:Response.data})
+                
+            }
         }).catch((error)=>{})
-        axios.get('http://localhost:9000/api/inspection/GetConveyorStatus2',{timeout:'200'}).then((Response)=>{
-            this.setState({conveyor2:Response.data})
+        axios.get(this.props.url+'/api/inspection/GetConveyorStatus2',{timeout:'500'}).then((Response)=>{
+            if(Response.data===this.state.conveyor2){
+
+            } else {
+                this.setState({conveyor2:Response.data})
+                
+            }
+            
         }).catch((error)=>{})
-        axios.get('http://localhost:9000/api/inspection/GetTransportStatus',{timeout:'200'}).then((Response)=>{
-            this.setState({transportStatus:Response.data})
+        axios.get(this.props.url+'/api/inspection/GetTransportStatus',{timeout:'500'}).then((Response)=>{
+            if(Response.data===this.state.transportStatus){
+
+            } else {
+                this.setState({transportStatus:Response.data})
+            }
+            
         }).catch((error)=>{})
         //get conveyor status
       },500)
@@ -124,37 +153,40 @@ class MainPage extends Component {
     }
     handleLogout(e){
         e.preventDefault();  
-        axios.post('http://localhost:9000/api/user/Logout','',{
+        axios.post(this.props.url+'/api/user/Logout','',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
             }
         })
-        window.location.href='/#/login'
+        this.props.history.push('/login')
     }
     _onItemInvoked(item) {
         alert(`Item invoked: ${item.name}`);
       };
     handleStartTransport(e){
         e.preventDefault();
-        axios.get('http://localhost:9000/api/data/NewTransportSession',{
+        
+        axios.get(this.props.url+'/api/data/NewTransportSession',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
             }
         })
+        this.updateTransport();
     }
     handleStopTransport(e){
         e.preventDefault();
-        axios.get('http://localhost:9000/api/data/FinishTransportSession',{
+        axios.get(this.props.url+'/api/data/FinishTransportSession',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
             }
         })
+        this.updateTransport();
     }
     updateImport(){
-        axios.get('http://localhost:9000/api/data/GetCurrentImportSession',{
+        axios.get(this.props.url+'/api/data/GetCurrentImportSession',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
@@ -163,8 +195,8 @@ class MainPage extends Component {
             if (Response.data){
                 const importData=[ 
                     {key:1,name:'Mã lô dừa',value:Response.data.ImportCode},
-                    {key:2,name:'Nhân viên thu mua',value:Response.data.BuyerUser},
-                    {key:3,name:'Nhân viên thủ kho',value:Response.data.WarehouseUser},
+                    {key:2,name:'Nhân viên thu mua',value:Response.data.BuyerUser.Name},
+                    {key:3,name:'Nhân viên thủ kho',value:Response.data.WarehouseUser.Name},
                     {key:4,name:'Tiêu chuẩn',value:Response.data.ImportCode},
                     {key:5,name:'Loại dừa',value:Response.data.Standard},
                     {key:6,name:'Đơn vị vận chuyển',value:Response.data.Transporter},
@@ -177,7 +209,7 @@ class MainPage extends Component {
        
     }
     updateTransport(){
-        axios.get('http://localhost:9000/api/data/GetCurrentTransportSession',{
+        axios.get(this.props.url+'/api/data/GetCurrentTransportSession',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
@@ -191,22 +223,38 @@ class MainPage extends Component {
                     {key:4,name:'Thời gian bắt đầu',value:Response.data.StartTime},
                     {key:5,name:'Thời gian kết thúc',value:2},
                 ]
+                this.setState({items2:transportData})
+            }
+        })
+        axios.get(this.props.url+'/api/data/GetCurrentTransports',{
+            headers: {
+            'Content-Type':'application/json',
+            "Access-Control-Allow-Origin": "*"
+            }
+        }).then((Response)=>{
+            if (Response.data){
+                const transportlist= Response.data.map((value,index)=>{
+                    return {key:value.TransportID,name:value.TransportID,value1:value.Count,value2:value.Weight}
+                })
+                
+                this.setState({items3:transportlist})
             }
         })
        
     }
     handleStartConveyor(e){
         e.preventDefault()
-        axios.get('http://localhost:9000/api/inspection/continue',{
+        axios.get(this.props.url+'/api/inspection/continue',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
             }
         })
+        
     }
     handleStopConveyor(e){
         e.preventDefault()
-        axios.get('http://localhost:9000/api/inspection/pause',{
+        axios.get(this.props.url+'/api/inspection/pause',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"
@@ -216,8 +264,8 @@ class MainPage extends Component {
     render() { 
         return ( 
             <div className='mainlayout'>
-                {this.state.modalOpen?<NewImportSession onClose={(e)=>{e.preventDefault(); this.setState({modalOpen:false})}}></NewImportSession>:null}
-                {this.state.conveyorOpen?<ConveyorControl  onClose={(e)=>{e.preventDefault(); this.setState({conveyorOpen:false})}}></ConveyorControl>:null}
+                {this.state.modalOpen?<NewImportSession url={this.props.url} onClose={(e)=>{e.preventDefault(); this.setState({modalOpen:false});this.updateImport()}}></NewImportSession>:null}
+                {this.state.conveyorOpen?<ConveyorControl url={this.props.url}  onClose={(e)=>{e.preventDefault(); this.setState({conveyorOpen:false})}}></ConveyorControl>:null}
                 <div className='navheader'>
                     <div className="leftHeader">
                         <div className='headerButtonText' onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}}>
@@ -278,13 +326,12 @@ class MainPage extends Component {
                           
                            
                         </div>
-                        <div className='headerButton' onClick={(e)=>{this.handleLogout(e)}}>
+                        <div className='headerButton'  onClick={(e)=>{this.handleLogout(e)}}>
                             <Icon iconName='SignOut' >
 
                             </Icon>
                             
-                        </div>
-                        
+                        </div>                        
                     </div>
                 </div>
                 <div className="contentContainer">
@@ -326,7 +373,7 @@ class MainPage extends Component {
                                     <Text  variant='mega'>{this.state.weight}</Text>
                                 </div>
                             </div>
-                        <img  src="http://localhost:9000/api/Stream/CameraView" width={1000} height={600} style={{border:'0px'}}> 
+                        <img  src={this.props.url+"/api/stream/cameraview"} width={1000} height={600} style={{border:'0px'}}> 
                         </img>
                     </div>
                     <div className="rightcontent">
@@ -346,4 +393,4 @@ class MainPage extends Component {
     }
 }
  
-export default MainPage;
+export default withRouter(MainPage);

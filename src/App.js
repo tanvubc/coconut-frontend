@@ -4,47 +4,80 @@ import MainPage from  './components/mainpage.js'
 import LoginPage from  './components/loginpage.js'
 import ReportPage from './components/reportpage.js'
 import UserPage from './components/userpage.js'
-
+import DiscoveryPage from './components/discoverypage.js'
+import { DefaultButton, PrimaryButton, Stack, IStackTokens,Modal } from 'office-ui-fabric-react';
+import {withRouter} from 'react-router';
+import {NavLink} from 'react-router-dom';
 import {
   Redirect,
   HashRouter,
   Route,
+  Switch
 } from "react-router-dom";
 import RegisterPage from './components/registerpage';
 import axios from 'axios';
-import React, { useState } from 'react';
-function App() {
-  const [isLogin, setIslogin] = useState(true);
-  function IsLogin(){
-      console.log('check login')
-      axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
-            if (Response.data){
-              setIslogin(true)
-            }
-            else{
-              setIslogin(false)
-            }
-      })
+import React, { Component } from 'react';
+const Store = window.require('electron-store');
+const store = new Store();
+const loadedDevice= store.get('deviceList');
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ipaddress:'192.168.0.12',
+      showdiscovery:false, 
+      listDevice:[]
+     }
+    this.routeref=React.createRef();
   }
-  return (
-      <HashRouter>
-         <Route exact  path="/" >
-          
-           {isLogin? <MainPage></MainPage>:  <Redirect to ='/login'></Redirect>}
-          
-         </Route>
-         <Route   path="/login" component={LoginPage}>
-         </Route>
-         <Route   path="/register" component={RegisterPage}>
-         </Route>
-         <Route   path="/report" component={ReportPage}>
-         </Route>
-         <Route   path="/user" component={UserPage}>
-         </Route>
+  componentDidMount(){
+    window.ipcRenderer.on('show-discovery',()=>{
+      this.setState({showdiscovery:true})
+    })
+    window.ipcRenderer.on('message',(event,args)=>{
+      console.log(args)
+      this.routeref.current.history.push(args)
+      
+   })
+  }
+   handleAddDevice(devices){
+    devices.forEach(element => {
+      if(this.state.listDevice.some(item=>item.ip===element.ip)){
+
+      }else{
+         this.setState( prestate =>({ listDevice:([...prestate.listDevice,element])}))
+      }
+   });
+  
+  
+}
+  render() { 
+    return ( 
+      <div>
+        {this.state.showdiscovery?<Modal isOpen={true}>
+            <DiscoveryPage onAddDevice={(devices)=>this.handleAddDevice(devices)} onclose={()=>{this.setState({showdiscovery:false})}}></DiscoveryPage>
+        </Modal>:null}
+        <HashRouter ref={this.routeref}>
+        <Switch>
+        <Route exact   path="/" render={(props) => <MainPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>       
+        </Route>
+        <Route   path="/login"  render={(props) => <LoginPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+        </Route>
+        <Route   path="/register"  render={(props) => <RegisterPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+        </Route>
+        <Route   path="/report"  render={(props) => <ReportPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+        </Route>
+        <Route   path="/user" render={(props) => <UserPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+        </Route>
+        </Switch>
+
+        
       </HashRouter>
-    
-    
-  );
+      </div>
+      
+
+     );
+  }
 }
 
 export default App;
