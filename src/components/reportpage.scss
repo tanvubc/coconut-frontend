@@ -5,6 +5,7 @@
     flex-direction: column;
     .navheader{
         display: flex;
+        width: auto;
         height: 48px;
         background-color: #0078D4;
         .centerHeader{
@@ -13,18 +14,18 @@
             margin-right: auto;
             align-items: center;
             height: 100%;
-            .dropdown{
+            .date{
                 margin: 5px;
-                display: flex;
+                // display: flex;
                 align-items: center;
-                height: 80%;
-                width: auto;
+                height: 32px;
+                width: 170px;
                 /* Grey palette / White */
-        
                 background: #FFFFFF;
                 opacity: 0.8;
                 border-radius: 4px;
             }
+            
         }
         
     }
@@ -116,21 +117,45 @@
     .leftHeader{
         margin-left: 0px;
         margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
         display: flex;  
-        .searchBox{
-            display: flex;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 5px;
-            margin-bottom: 5px;
+        height: 100%;
+        .dropdown{
+            margin: auto;
+            // display: flex;
             align-items: center;
-            height: auto;
-            width: 500px;
+            width: 80px;
             /* Grey palette / White */
-    
             background: #FFFFFF;
             opacity: 0.8;
             border-radius: 4px;
+            height: 32px;
+            border-right: transparent;
+        }
+        .headerTitle{
+            white-space: nowrap;
+            // border-right: 1px solid rgba(255, 255, 255, 0.082);
+            padding: 0px 12px 0px 12px;
+            height: 48px;
+            background-color: #0078D4;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 1);
+            // cursor: pointer;
+            user-select: none;
+            font-size: large;
+        }
+        .searchBox{
+            border-left: transparent;
+            display: flex;
+            margin: auto;
+            align-items: center;
+            height: 32px;
+            width: 450px;
+            background: #FFFFFF;
+            opacity: 0.8;
+            border-radius: 2px;
             .searchIcon{
                 margin-left: 12px;
                 /* Fabric Icons / 16 */
@@ -139,11 +164,9 @@
                 font-size: 16px;
                 line-height: 100%;
                 /* or 16px */
-
                 display: flex;
                 align-items: center;
                 text-align: center;
-
                 color: #004578;
             }
             .searchText{
@@ -168,6 +191,8 @@
         display: flex;
         flex-direction: column;
         width: auto;
+        margin-left: 20px;
+        margin-right: 20px;
         .textContent{
             font-size: small;
             margin: 0px;
@@ -183,7 +208,7 @@
         // }
         .pane{
             margin-bottom: 5px;
-            height: 250px;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
