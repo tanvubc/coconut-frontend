@@ -14,13 +14,15 @@ class LoginPage extends Component {
         super(props);
         this.state = { 
             modalOpen:false,
-            logging:false
+            logging:false,
+            error:{title:'Error',message:'Sai tên đăng nhập hoặc mật khẩu'}
          }
          this.handleLogin=this.handleLogin.bind(this)
     }
     handleLogin(event)
     {
         event.preventDefault()
+        this.setState({logging:true})
         axios.post(this.props.url+'/api/user/Login',JSON.stringify({
             username:event.target.username.value,
             password:event.target.password.value
@@ -32,20 +34,19 @@ class LoginPage extends Component {
         }).then((Response)=>{
            if(!Response.data.Result)
            {
-                this.setState({modalOpen:true})
+                this.setState({modalOpen:true,logging:false})
            }
            else{
 
                this.props.history.push('/')
                
            }
+        }).catch((error)=>{
+            this.setState({modalOpen:true,logging:false})
+
         })
-        this.setState({logging:true})
-        setTimeout(() => {
-            this.setState({logging:false,modalOpen:true})
-            
-        }, 5000);
         
+               
     }
     render() { 
         return ( 
@@ -54,8 +55,8 @@ class LoginPage extends Component {
                 <div class="bgimage"></div>
                 <DefaultButton onClick={(e)=>{e.preventDefault();window.history.back()}} style={{position:'absolute',left:'40px',top:'40px'}} >Quay về</DefaultButton>
                 <Modal isOpen={this.state.modalOpen} >
-                    <h3 style={{marginLeft:'20px'}} >Error</h3>
-                   <p style={{marginLeft:'20px'}}>Sai tên đăng nhập hoặc mật khẩu</p>
+                    <h3 style={{marginLeft:'20px'}} >{this.state.error.title}</h3>
+                   <p style={{marginLeft:'20px'}}>{this.state.error.message}</p>
                    <div style={{width:'100%',display:'flex',position:'absolute',bottom:'20px'}}>
                    <PrimaryButton style={{marginLeft:'auto',marginRight:'auto'}} onClick={(e)=>  {e.preventDefault(); this.setState({modalOpen:false})}}>OK</PrimaryButton>
                    </div>                 

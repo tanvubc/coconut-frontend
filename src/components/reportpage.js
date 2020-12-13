@@ -1,5 +1,5 @@
 import React from 'react'
-import {ComboBox,Dropdown,Label,PrimaryButton, DatePicker, DayOfWeek, IDatePickerStrings,Icon, SearchBox} from '@fluentui/react';
+import {ComboBox,Dropdown,Label,PrimaryButton, DatePicker, DayOfWeek, IDatePickerStrings,Icon, SearchBox,DefaultButton} from '@fluentui/react';
 import './reportpage.scss'
 import {DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, Selection, ConstrainMode, IDetailsFooterProps, DetailsRow,} from 'office-ui-fabric-react/lib/DetailsList';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
@@ -51,6 +51,7 @@ class ReportPage extends React.Component{
         this.state = {  
             searchType:"All",
             searchWhat:"",
+            enableImportReport:false,
             items:[{ 
                 ID: null,
                 WarehouseUser: [],
@@ -68,8 +69,19 @@ class ReportPage extends React.Component{
         this.onChangeDropdown=this.onChangeDropdown.bind(this)
         this.onSelectDateBegin=this.onSelectDateBegin.bind(this)
         this.onSelectDateEnd=this.onSelectDateEnd.bind(this)
+        this._selection = new Selection({
+            onSelectionChanged: () => {
+                console.log(this._selection.getSelectedCount())
+              if ( this._selection.getSelectedCount()>0){
+                    this.setState({enableImportReport:true})
+              }else{
+                this.setState({enableImportReport:false})
+              }
+            },
+          });
         
         this._columns = [
+            { key: 'column9', name: 'UID', fieldName: 'ID', minWidth: 80,  isResizable: true ,maxWidth:80},
             { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80,  isResizable: true },
             { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100,  isResizable: true },
             { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140,  isResizable: true },
@@ -91,11 +103,11 @@ class ReportPage extends React.Component{
     }
     onSearchBox(_,text){
         if (text==""){
-            axios.get('http://localhost:9000/api/data/getallimportsessions').then(res=>{
+            axios.get(this.props.url+'/api/data/getallimportsessions').then(res=>{
               this.setState({items:res.data})
             })
         } else {
-            axios.get('http://localhost:9000/api/data/getsearchbyname', 
+            axios.get(this.props.url+'/api/data/getsearchbyname', 
             {params: {searchType: this.state.searchType, searchWhat: text}}).then(res=>
                 this.setState({items:res.data})
             )
@@ -120,10 +132,26 @@ class ReportPage extends React.Component{
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
       componentDidMount(){
-          axios.get('http://localhost:9000/api/data/getallimportsessions').then(res=>{
+          axios.get(this.props.url+'/api/data/getallimportsessions').then(res=>{
               this.setState({items:res.data})
-              console.log(this.state.items[0].BuyerUser.Name)
+            //   console.log(this.state.items[0].BuyerUser.Name)
           })
+      }
+      handleImportExportPDF(){
+        window.ipcRenderer.send('openpdf',{url:this.props.url+'/api/report/GetImportReportpdf?id='+this._selection.getSelection()[0].ID,title:'Báo cáo nhập hàng'})
+        // axios.get(this.props.url+'/api/report/GetImportReportpdf?id=1',
+        // {
+        //     responseType:'blob'
+        // }
+        // ).then(response=>{
+        //     const url = window.URL.createObjectURL(new Blob([response.data]));
+        //     const link = document.createElement('a');
+        //     link.href = url;
+        //     link.setAttribute('download', 'file.pdf'); //or any other extension
+        //     document.body.appendChild(link);
+        //     link.click();
+          
+        // })
       }
     render(){
         return(
@@ -137,7 +165,7 @@ class ReportPage extends React.Component{
                             className='dropdown'
                             defaultSelectedKey='ngaynhapkho'
                             // dropdownWidth={170}
-                            // borderless={true}                            
+                             borderless={true}                            
                             // selectedKey={this.state._columns}
                             // eslint-disable-next-line react/jsx-no-bind
                             onChange={this.onChangeDropdown}
@@ -182,13 +210,60 @@ class ReportPage extends React.Component{
                     <div className='rightHeader'>
                         <PrimaryButton className='headerButtonText' text="Xuất báo cáo tháng" />
                         <PrimaryButton className='headerButtonText' text="Xuất báo cáo theo User" />
+                      
                     </div>
                 </div>
                 <div className="contentContainer">
-                    <Label className='textContent'>Hiển thị báo cáo tháng</Label>
+                    <div style={{width:'100%', display:'flex',flexDirection:'row',alignItems:'center',marginRight:'20px'}}>
+                        <Label className='textContent'>Lượt nhập hàng</Label>
+                        <DefaultButton style={{marginRight:'0px',marginLeft:'auto'}} disabled={!this.state.enableImportReport} text="Xuất báo cáo"  onClick={(e)=>{e.preventDefault();
+                            this.handleImportExportPDF();
+                        }}/>
+                    </div>
+                   
+                    <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
+                        <DetailsList selection={this._selection}
+                            items={this.state.items.map((value,index)=>{
+                                return {
+                                    ID:value.ID,
+                                    ImportCode:value.ImportCode,
+                                    Standard:value.Standard,
+                                    BuyerUser:value.BuyerUser.Name,
+                                    WarehouseUser:value.WarehouseUser.Name,
+                                    CoconutType:value.CoconutType,
+                                    Region:value.Region,
+                                    Transporter:value.Transporter,
+                                    WarehouseLocation:value.WarehouseLocation,
+                                    ConveyorID:value.ConveyorID
+
+                                }
+                            })}
+                            columns={this._columns}
+                            setKey="set"
+                            layoutMode={DetailsListLayoutMode.justified}
+                            constrainMode={ConstrainMode.unconstrained}
+                            onRenderDetailsHeader={onRenderDetailsHeader}
+                        />
+                    </ScrollablePane>
+                    <div style={{width:'100%',height:'1px',backgroundColor:'#c5c5c5', marginTop:'10px'}}></div>
+                    <Label className='textContent'>Lượt vận chuyển hàng</Label>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList
-                            items={this.state.items}
+                            items={this.state.items.map((value,index)=>{
+                                return {
+                                    ID:value.ID,
+                                    ImportCode:value.ImportCode,
+                                    Standard:value.Standard,
+                                    BuyerUser:value.BuyerUser.Name,
+                                    WarehouseUser:value.WarehouseUser.Name,
+                                    CoconutType:value.CoconutType,
+                                    Region:value.Region,
+                                    Transporter:value.Transporter,
+                                    WarehouseLocation:value.WarehouseLocation,
+                                    ConveyorID:value.ConveyorID
+
+                                }
+                            })}
                             columns={this._columns}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}
