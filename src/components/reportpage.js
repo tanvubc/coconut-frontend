@@ -49,6 +49,8 @@ class ReportPage extends React.Component{
     constructor(){
         super()
         this.state = {  
+            searchStartTime: '',
+            searchEndTime: '',
             searchType:"All",
             searchWhat:"",
             items:[{ 
@@ -70,33 +72,38 @@ class ReportPage extends React.Component{
         this.onSelectDateEnd=this.onSelectDateEnd.bind(this)
         
         this._columns = [
-            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80,  isResizable: true },
-            { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100,  isResizable: true },
-            { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140,  isResizable: true },
-            { key: 'column3', name: 'Nhân viên thủ kho', fieldName: 'WarehouseUser', minWidth: 140,  isResizable: true },
-            { key: 'column4', name: 'Loại dừa', fieldName: 'CoconutType', minWidth: 80, isResizable: true },
-            { key: 'column5', name: 'Vùng thu mua', fieldName: 'Region', minWidth: 100,  isResizable: true },
-            { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'Transporter', minWidth: 140,  isResizable: true },
-            { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140,  isResizable: true },
-            { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140,  isResizable: true },
+            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80, maxWidth:100, isResizable: true },
+            { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100, maxWidth:120, isResizable: true },
+            { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column3', name: 'Nhân viên thủ kho', fieldName: 'WarehouseUser', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column4', name: 'Loại dừa', fieldName: 'CoconutType', minWidth: 80, maxWidth:100, isResizable: true },
+            { key: 'column5', name: 'Vùng thu mua', fieldName: 'Region', minWidth: 100, maxWidth:120, isResizable: true },
+            { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'Transporter', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column9', name: 'Thời điểm bắt đầu', fieldName: 'Date', minWidth: 140, maxWidth:160, isResizable: true },
         ];
     }
     onSelectDateBegin(dateBegin){
-        // dateBegin = moment(dateBegin).subtract(10,'day').format('YYYY-MM-DD')
+        dateBegin = moment(dateBegin).format("YYYY-MM-DDTHH:MM:SS.SSS")
         console.log(dateBegin)
-        
+        this.setState({searchStartTime: dateBegin})
+        console.log('State', this.state)
     }
     onSelectDateEnd(dateEnd){
+        dateEnd = moment(dateEnd).format("YYYY-MM-DDTHH:MM:SS.SSS")
         console.log(dateEnd)
+        this.setState({searchEndTime: dateEnd})
+        console.log('State1', this.state)
     }
     onSearchBox(_,text){
         if (text==""){
-            axios.get('http://localhost:9000/api/data/getallimportsessions').then(res=>{
+            axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
               this.setState({items:res.data})
             })
         } else {
             axios.get('http://localhost:9000/api/data/getsearchbyname', 
-            {params: {searchType: this.state.searchType, searchWhat: text}}).then(res=>
+                {params: {searchType: this.state.searchType, searchWhat: text, searchStartTime: this.state.searchStartTime, searchEndTime: this.state.searchEndTime}}).then(res=>
                 this.setState({items:res.data})
             )
         }
@@ -119,12 +126,15 @@ class ReportPage extends React.Component{
         { key: 'Transporter', text: 'Đơn vị vận chuyển' },
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
-      componentDidMount(){
-          axios.get('http://localhost:9000/api/data/getallimportsessions').then(res=>{
-              this.setState({items:res.data})
-              console.log(this.state.items[0].BuyerUser.Name)
-          })
-      }
+    componentDidMount(){
+        this.setState({searchEndTime: moment(Date.now()).format("YYYY-MM-DDTHH:MM:00.000")})
+        this.setState({searchStartTime: moment(Date.now()).subtract(10, 'days').format("YYYY-MM-DDTHH:MM:00.000")})
+        axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
+            this.setState({items:res.data})
+            console.log(this.state.items)
+        })
+        console.log(this.state)
+    }
     render(){
         return(
             <div className='reportpage'>
