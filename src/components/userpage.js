@@ -18,8 +18,6 @@ import onRenderDetailsHeader from './renderheader'
     
 
 class UserPage extends Component {
-    _selection: Selection;
-    
     constructor(props) {
 
         super(props);
@@ -68,15 +66,16 @@ class UserPage extends Component {
         this.onUserNameTextChange=this.onUserNameTextChange.bind(this)
         this.onFirstNameTextChange=this.onFirstNameTextChange.bind(this)
         this.state.itemsRender=this.state.items
+
+        this._selection = new Selection({
+            onSelectionChanged: this._onItemsSelectionChanged,
+          })
     }
-    _selection = new Selection({
-        onSelectionChanged: this._onItemsSelectionChanged,
-      })
+    
     componentDidMount(){
-        
-        axios.get('http://localhost:9000/api/user/IsLogin').then((Response)=>{
+        axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
             if (Response.data){
-                axios.get('http://localhost:9000/api/user/CurrentUser').then((Respone1)=>{
+                axios.get(this.props.url+'/api/user/CurrentUser').then((Respone1)=>{
                     if(Respone1.data)
                     {
                         console.log(Respone1.data)
@@ -88,6 +87,25 @@ class UserPage extends Component {
                 window.location.href='/#/login'
             }
       })
+      axios.get(this.props.url+'/api/user/GetUserList').then((Response)=>{
+            if (Response.data){
+                const userlist= Response.data.map((value,index)=>{
+                    return (
+                    {
+                        key:index,
+                        userName:value.Username,
+                        lastLogin:value.LastLogin,
+                        createdDate:value.DateCreated,
+                        role:value.Role.Name,
+                        firstName:value.Name
+                    }
+                    )
+                })
+                this.setState({items:userlist})
+            }
+           
+      })
+
     }
     onUserNameTextChange(_,text) {
         return(
@@ -116,7 +134,7 @@ class UserPage extends Component {
 
     handleLogout(e){
         e.preventDefault();  
-        axios.post('http://localhost:9000/api/user/Logout','',{
+        axios.post(this.props.url+'/api/user/Logout','',{
             headers: {
             'Content-Type':'application/json',
             "Access-Control-Allow-Origin": "*"

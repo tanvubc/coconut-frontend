@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router';
+import {NavLink} from 'react-router-dom';
 import './loginpage.scss';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { TextField, MaskedTextField } from 'office-ui-fabric-react/lib/TextField';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens,Modal } from 'office-ui-fabric-react';
@@ -10,14 +13,15 @@ class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            modalOpen:false
+            modalOpen:false,
+            logging:false
          }
          this.handleLogin=this.handleLogin.bind(this)
     }
     handleLogin(event)
     {
         event.preventDefault()
-        axios.post('http://localhost:9000/api/user/Login',JSON.stringify({
+        axios.post(this.props.url+'/api/user/Login',JSON.stringify({
             username:event.target.username.value,
             password:event.target.password.value
             }),{
@@ -31,9 +35,17 @@ class LoginPage extends Component {
                 this.setState({modalOpen:true})
            }
            else{
-               window.location.href='/'
+
+               this.props.history.push('/')
+               
            }
         })
+        this.setState({logging:true})
+        setTimeout(() => {
+            this.setState({logging:false,modalOpen:true})
+            
+        }, 5000);
+        
     }
     render() { 
         return ( 
@@ -46,23 +58,26 @@ class LoginPage extends Component {
                    <p style={{marginLeft:'20px'}}>Sai tên đăng nhập hoặc mật khẩu</p>
                    <div style={{width:'100%',display:'flex',position:'absolute',bottom:'20px'}}>
                    <PrimaryButton style={{marginLeft:'auto',marginRight:'auto'}} onClick={(e)=>  {e.preventDefault(); this.setState({modalOpen:false})}}>OK</PrimaryButton>
-                   </div>
-                   
-
-                  
+                   </div>                 
                 </Modal>
                 <h2>Coconut counting system</h2>
                 <form onSubmit={this.handleLogin}>
-                <div className='loginbox'>
-                    <h3>Login</h3>
+                {this.state.logging?
+                <div className='loginbox1' >
+                    <Spinner className='loader'  size={SpinnerSize.large}  label='Đang đăng nhập' style={{marginTop:'20px',fontSize:'15px'}} >
                     
-                    <TextField  style={{textAlign:'center'}} className='inputbox' name='username' placeholder='Tên đăng nhập'></TextField>
-                    <TextField style={{textAlign:'center'}} className='inputbox' type='password' name='password' placeholder='Mật khẩu'></TextField>
-                    <Link href='/#register' style={{marginTop:'10px'}}>Tạo mới?</Link>
-                    <PrimaryButton  style={{marginTop:'20px'}} type='submit'>Đăng nhập</PrimaryButton>
-                   
-                    
+                    </Spinner>
                 </div>
+                    :
+                <div className='loginbox'>
+                <h3>Login</h3>
+                   
+                        
+                        <TextField  style={{textAlign:'center'}} className='inputbox' name='username' placeholder='Tên đăng nhập'></TextField>
+                    <TextField style={{textAlign:'center'}} className='inputbox' type='password' name='password' placeholder='Mật khẩu'></TextField>
+                    <NavLink to='/register' style={{marginTop:'10px'}}>Tạo mới?</NavLink>
+                    <PrimaryButton  style={{marginTop:'20px'}} type='submit'>Đăng nhập</PrimaryButton>
+                </div>}
                 </form>
                 
             </div>
@@ -71,4 +86,4 @@ class LoginPage extends Component {
     }
 }
  
-export default LoginPage;
+export default withRouter(LoginPage);
