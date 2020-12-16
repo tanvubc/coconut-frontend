@@ -4,6 +4,7 @@ import './mainpage.scss';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens ,Modal,IconButton} from 'office-ui-fabric-react';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DetailsList, DetailsListLayoutMode, Selection, IColumn,SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import Emegency from './emegency.js'
 import {Link, NavLink} from 'react-router-dom'
 import axios from 'axios'
 import { Icon } from '@fluentui/react/lib/Icon';
@@ -14,6 +15,7 @@ class MainPage extends Component {
 
         super(props);
         this.state = {
+            showEmegency:false,
             transportStatus:false,
             conveyor1:false,
             conveyor2:false,
@@ -121,6 +123,14 @@ class MainPage extends Component {
 
             } else {
                 this.setState({transportStatus:Response.data})
+            }
+            
+        }).catch((error)=>{})
+        axios.get(this.props.url+'/api/inspection/GetEmegencyStatus',{timeout:'500'}).then((Response)=>{
+            if(Response.data===this.state.showEmegency){
+
+            } else {
+                this.setState({showEmegency:Response.data})
             }
             
         }).catch((error)=>{})
@@ -264,6 +274,7 @@ class MainPage extends Component {
     render() { 
         return ( 
             <div className='mainlayout'>
+                {this.state.showEmegency?<Emegency url={this.props.url}  onClose={(e)=>{e.preventDefault(); this.setState({showEmegency:false})}}></Emegency>:null}
                 {this.state.modalOpen?<NewImportSession url={this.props.url} onClose={(e)=>{e.preventDefault(); this.setState({modalOpen:false});this.updateImport()}}></NewImportSession>:null}
                 {this.state.conveyorOpen?<ConveyorControl url={this.props.url}  onClose={(e)=>{e.preventDefault(); this.setState({conveyorOpen:false})}}></ConveyorControl>:null}
                 <div className='navheader'>
