@@ -49,6 +49,8 @@ class ReportPage extends React.Component{
     constructor(){
         super()
         this.state = {  
+            searchStartTime: '',
+            searchEndTime: '',
             searchType:"All",
             searchWhat:"",
             enableImportReport:false,
@@ -64,24 +66,38 @@ class ReportPage extends React.Component{
                 ImportCode: "",
                 Transporter: ""
             }], 
+            items2:[],
         }
         this.onSearchBox=this.onSearchBox.bind(this)
         this.onChangeDropdown=this.onChangeDropdown.bind(this)
         this.onSelectDateBegin=this.onSelectDateBegin.bind(this)
         this.onSelectDateEnd=this.onSelectDateEnd.bind(this)
+
         this._selection = new Selection({
             onSelectionChanged: () => {
-                console.log(this._selection.getSelectedCount())
-              if ( this._selection.getSelectedCount()>0){
-                    this.setState({enableImportReport:true})
-              }else{
-                this.setState({enableImportReport:false})
-              }
+                if (this._selection.getSelectedCount()>0){
+                        this.setState({enableImportReport:true})
+                } else {
+                    this.setState({enableImportReport:false})
+                }
+                const data = []
+                const items = this._selection.getSelection()
+                const ImportID = items.map(item=>{return(item.ID)})
+                var id
+                for (id in ImportID){
+                    axios.get(this.props.url+'/api/data/getTransportSessionbyImportID', {params: {ImportID: ImportID[id]}}).then(res=>{
+                        data.push.apply(data,res.data)    
+                    })
+                    
+                }
+                this.setState({items2:data})
+           
+                
             },
           });
         
         this._columns = [
-            { key: 'column9', name: 'UID', fieldName: 'ID', minWidth: 80,  isResizable: true ,maxWidth:80},
+            { key: 'column9', name: 'UID', fieldName: 'ID', minWidth: 30,  isResizable: true ,maxWidth:80},
             { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80,  isResizable: true },
             { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100,  isResizable: true },
             { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140,  isResizable: true },
@@ -92,23 +108,36 @@ class ReportPage extends React.Component{
             { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140,  isResizable: true },
             { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140,  isResizable: true },
         ];
+        this._columns2 = [
+
+            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80, maxWidth: 100, isResizable: true },
+            { key: 'column1', name: 'Lượt vận chuyển', fieldName: 'TransportID', minWidth: 120, maxWidth: 140, isResizable: true },
+            { key: 'column2', name: 'Khối lượng', fieldName: 'Weight', minWidth: 100, maxWidth: 120, isResizable: true },
+            { key: 'column3', name: 'Số lượng', fieldName: 'Count', minWidth: 100, maxWidth: 120, isResizable: true },
+            { key: 'column4', name: 'Thời gian bắt đầu', fieldName: 'StartTime', minWidth: 140, maxWidth: 160, isResizable: true },
+            { key: 'column5', name: 'Thời gian kết thúc', fieldName: 'EndTime', minWidth: 140, maxWidth: 160, isResizable: true },
+        ];
     }
     onSelectDateBegin(dateBegin){
-        // dateBegin = moment(dateBegin).subtract(10,'day').format('YYYY-MM-DD')
+        dateBegin = moment(dateBegin).format("YYYY-MM-DDTHH:MM:SS.SSS")
         console.log(dateBegin)
-        
+        this.setState({searchStartTime: dateBegin})
+        console.log('State', this.state)
     }
     onSelectDateEnd(dateEnd){
+        dateEnd = moment(dateEnd).format("YYYY-MM-DDTHH:MM:SS.SSS")
         console.log(dateEnd)
+        this.setState({searchEndTime: dateEnd})
+        console.log('State1', this.state)
     }
     onSearchBox(_,text){
         if (text==""){
-            axios.get(this.props.url+'/api/data/getallimportsessions').then(res=>{
+            axios.get(this.props.url+'/api/data/get10daysimportsessions').then(res=>{
               this.setState({items:res.data})
             })
         } else {
             axios.get(this.props.url+'/api/data/getsearchbyname', 
-            {params: {searchType: this.state.searchType, searchWhat: text}}).then(res=>
+                {params: {searchType: this.state.searchType, searchWhat: text, searchStartTime: this.state.searchStartTime, searchEndTime: this.state.searchEndTime}}).then(res=>
                 this.setState({items:res.data})
             )
         }
@@ -120,6 +149,7 @@ class ReportPage extends React.Component{
 
         )
     }
+    
     options = [
         { key: 'All', text: 'Tất cả' },
         { key: 'Standard', text: 'Tiêu chuẩn' },
@@ -132,10 +162,13 @@ class ReportPage extends React.Component{
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
       componentDidMount(){
-          axios.get(this.props.url+'/api/data/getallimportsessions').then(res=>{
-              this.setState({items:res.data})
-            //   console.log(this.state.items[0].BuyerUser.Name)
-          })
+        this.setState({searchEndTime: moment(Date.now()).format("YYYY-MM-DDTHH:MM:00.000")})
+        this.setState({searchStartTime: moment(Date.now()).subtract(10, 'days').format("YYYY-MM-DDTHH:MM:00.000")})
+        axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
+            this.setState({items:res.data})
+            console.log(this.state.items)
+        })
+        
       }
       handleImportExportPDF(){
         window.ipcRenderer.send('openpdf',{url:this.props.url+'/api/report/GetImportReportpdf?id='+this._selection.getSelection()[0].ID,title:'Báo cáo nhập hàng'})
@@ -243,28 +276,15 @@ class ReportPage extends React.Component{
                             layoutMode={DetailsListLayoutMode.justified}
                             constrainMode={ConstrainMode.unconstrained}
                             onRenderDetailsHeader={onRenderDetailsHeader}
+                            onActiveItemChanged={this.onActiveItemChanged}
                         />
                     </ScrollablePane>
                     <div style={{width:'100%',height:'1px',backgroundColor:'#c5c5c5', marginTop:'10px'}}></div>
-                    <Label className='textContent'>Lượt vận chuyển hàng</Label>
+                    <Label className='textContent'>Chi tiết lượt nhập hàng</Label>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList
-                            items={this.state.items.map((value,index)=>{
-                                return {
-                                    ID:value.ID,
-                                    ImportCode:value.ImportCode,
-                                    Standard:value.Standard,
-                                    BuyerUser:value.BuyerUser.Name,
-                                    WarehouseUser:value.WarehouseUser.Name,
-                                    CoconutType:value.CoconutType,
-                                    Region:value.Region,
-                                    Transporter:value.Transporter,
-                                    WarehouseLocation:value.WarehouseLocation,
-                                    ConveyorID:value.ConveyorID
-
-                                }
-                            })}
-                            columns={this._columns}
+                            items={this.state.items2}
+                            columns={this._columns2}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}
                             constrainMode={ConstrainMode.unconstrained}
