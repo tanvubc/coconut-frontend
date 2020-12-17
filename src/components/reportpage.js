@@ -1,5 +1,5 @@
 import React from 'react'
-import {ComboBox,Dropdown,Label,PrimaryButton, DatePicker, DayOfWeek, IDatePickerStrings,Icon, SearchBox} from '@fluentui/react';
+import {ComboBox,Dropdown,Label,PrimaryButton, DatePicker, DayOfWeek, IDatePickerStrings,Icon, SearchBox,DefaultButton} from '@fluentui/react';
 import './reportpage.scss'
 import {DetailsList, DetailsListLayoutMode, IDetailsHeaderProps, Selection, ConstrainMode, IDetailsFooterProps, DetailsRow,} from 'office-ui-fabric-react/lib/DetailsList';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
@@ -53,6 +53,7 @@ class ReportPage extends React.Component{
             searchEndTime: '',
             searchType:"All",
             searchWhat:"",
+            enableImportReport:false,
             items:[{ 
                 ID: null,
                 WarehouseUser: [],
@@ -65,23 +66,57 @@ class ReportPage extends React.Component{
                 ImportCode: "",
                 Transporter: ""
             }], 
+            items2:[],
         }
         this.onSearchBox=this.onSearchBox.bind(this)
         this.onChangeDropdown=this.onChangeDropdown.bind(this)
         this.onSelectDateBegin=this.onSelectDateBegin.bind(this)
         this.onSelectDateEnd=this.onSelectDateEnd.bind(this)
+
+        this._selection = new Selection({
+            onSelectionChanged: () => {
+                if (this._selection.getSelectedCount()>0){
+                        this.setState({enableImportReport:true})
+                } else {
+                    this.setState({enableImportReport:false})
+                }
+                const data = []
+                const items = this._selection.getSelection()
+                const ImportID = items.map(item=>{return(item.ID)})
+                var id
+                for (id in ImportID){
+                    axios.get(this.props.url+'/api/data/getTransportSessionbyImportID', {params: {ImportID: ImportID[id]}}).then(res=>{
+                        data.push.apply(data,res.data)    
+                    })
+                    
+                }
+                this.setState({items2:data})
+           
+                
+            },
+          });
         
         this._columns = [
-            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80, maxWidth:100, isResizable: true },
-            { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100, maxWidth:120, isResizable: true },
-            { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140, maxWidth:160, isResizable: true },
-            { key: 'column3', name: 'Nhân viên thủ kho', fieldName: 'WarehouseUser', minWidth: 140, maxWidth:160, isResizable: true },
-            { key: 'column4', name: 'Loại dừa', fieldName: 'CoconutType', minWidth: 80, maxWidth:100, isResizable: true },
-            { key: 'column5', name: 'Vùng thu mua', fieldName: 'Region', minWidth: 100, maxWidth:120, isResizable: true },
-            { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'Transporter', minWidth: 140, maxWidth:160, isResizable: true },
-            { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140, maxWidth:160, isResizable: true },
-            { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140, maxWidth:160, isResizable: true },
-            { key: 'column9', name: 'Thời điểm bắt đầu', fieldName: 'Date', minWidth: 140, maxWidth:160, isResizable: true },
+            { key: 'column9', name: 'UID', fieldName: 'ID', minWidth: 30,  isResizable: true ,maxWidth:80},
+            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80,  isResizable: true },
+            { key: 'column1', name: 'Tiêu chuẩn', fieldName: 'Standard', minWidth: 100,  isResizable: true },
+            { key: 'column2', name: 'Nhân viên thu mua', fieldName: 'BuyerUser', minWidth: 140,  isResizable: true },
+            { key: 'column3', name: 'Nhân viên thủ kho', fieldName: 'WarehouseUser', minWidth: 140,  isResizable: true },
+            { key: 'column4', name: 'Loại dừa', fieldName: 'CoconutType', minWidth: 80, isResizable: true },
+            { key: 'column5', name: 'Vùng thu mua', fieldName: 'Region', minWidth: 100,  isResizable: true },
+            { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'Transporter', minWidth: 140,  isResizable: true },
+            { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140,  isResizable: true },
+            { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140,  isResizable: true },
+            { key: 'column10', name: 'Thời điểm bắt đầu', fieldName: 'Date', minWidth: 140, maxWidth:160, isResizable: true },
+        ];
+        this._columns2 = [
+
+            { key: 'column0', name: 'Mã lô dừa', fieldName: 'ImportCode', minWidth: 80, maxWidth: 100, isResizable: true },
+            { key: 'column1', name: 'Lượt vận chuyển', fieldName: 'TransportID', minWidth: 120, maxWidth: 140, isResizable: true },
+            { key: 'column2', name: 'Khối lượng', fieldName: 'Weight', minWidth: 100, maxWidth: 120, isResizable: true },
+            { key: 'column3', name: 'Số lượng', fieldName: 'Count', minWidth: 100, maxWidth: 120, isResizable: true },
+            { key: 'column4', name: 'Thời gian bắt đầu', fieldName: 'StartTime', minWidth: 140, maxWidth: 160, isResizable: true },
+            { key: 'column5', name: 'Thời gian kết thúc', fieldName: 'EndTime', minWidth: 140, maxWidth: 160, isResizable: true },
         ];
     }
     onSelectDateBegin(dateBegin){
@@ -98,11 +133,11 @@ class ReportPage extends React.Component{
     }
     onSearchBox(_,text){
         if (text==""){
-            axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
+            axios.get(this.props.url+'/api/data/get10daysimportsessions').then(res=>{
               this.setState({items:res.data})
             })
         } else {
-            axios.get('http://localhost:9000/api/data/getsearchbyname', 
+            axios.get(this.props.url+'/api/data/getsearchbyname', 
                 {params: {searchType: this.state.searchType, searchWhat: text, searchStartTime: this.state.searchStartTime, searchEndTime: this.state.searchEndTime}}).then(res=>
                 this.setState({items:res.data})
             )
@@ -115,6 +150,7 @@ class ReportPage extends React.Component{
 
         )
     }
+    
     options = [
         { key: 'All', text: 'Tất cả' },
         { key: 'Standard', text: 'Tiêu chuẩn' },
@@ -126,15 +162,30 @@ class ReportPage extends React.Component{
         { key: 'Transporter', text: 'Đơn vị vận chuyển' },
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
-    componentDidMount(){
+      componentDidMount(){
         this.setState({searchEndTime: moment(Date.now()).format("YYYY-MM-DDTHH:MM:00.000")})
         this.setState({searchStartTime: moment(Date.now()).subtract(10, 'days').format("YYYY-MM-DDTHH:MM:00.000")})
         axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
             this.setState({items:res.data})
             console.log(this.state.items)
         })
-        console.log(this.state)
-    }
+      }
+      handleImportExportPDF(){
+        window.ipcRenderer.send('openpdf',{url:this.props.url+'/api/report/GetImportReportpdf?id='+this._selection.getSelection()[0].ID,title:'Báo cáo nhập hàng'})
+        // axios.get(this.props.url+'/api/report/GetImportReportpdf?id=1',
+        // {
+        //     responseType:'blob'
+        // }
+        // ).then(response=>{
+        //     const url = window.URL.createObjectURL(new Blob([response.data]));
+        //     const link = document.createElement('a');
+        //     link.href = url;
+        //     link.setAttribute('download', 'file.pdf'); //or any other extension
+        //     document.body.appendChild(link);
+        //     link.click();
+          
+        // })
+      }
     render(){
         return(
             <div className='reportpage'>
@@ -147,7 +198,7 @@ class ReportPage extends React.Component{
                             className='dropdown'
                             defaultSelectedKey='ngaynhapkho'
                             // dropdownWidth={170}
-                            // borderless={true}                            
+                             borderless={true}                            
                             // selectedKey={this.state._columns}
                             // eslint-disable-next-line react/jsx-no-bind
                             onChange={this.onChangeDropdown}
@@ -192,14 +243,48 @@ class ReportPage extends React.Component{
                     <div className='rightHeader'>
                         <PrimaryButton className='headerButtonText' text="Xuất báo cáo tháng" />
                         <PrimaryButton className='headerButtonText' text="Xuất báo cáo theo User" />
+                      
                     </div>
                 </div>
                 <div className="contentContainer">
-                    <Label className='textContent'>Hiển thị báo cáo tháng</Label>
+                    <div style={{width:'100%', display:'flex',flexDirection:'row',alignItems:'center',marginRight:'20px'}}>
+                        <Label className='textContent'>Lượt nhập hàng</Label>
+                        <DefaultButton style={{marginRight:'0px',marginLeft:'auto'}} disabled={!this.state.enableImportReport} text="Xuất báo cáo"  onClick={(e)=>{e.preventDefault();
+                            this.handleImportExportPDF();
+                        }}/>
+                    </div>
+                   
+                    <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
+                        <DetailsList selection={this._selection}
+                            items={this.state.items.map((value,index)=>{
+                                return {
+                                    ID:value.ID,
+                                    ImportCode:value.ImportCode,
+                                    Standard:value.Standard,
+                                    BuyerUser:value.BuyerUser.Name,
+                                    WarehouseUser:value.WarehouseUser.Name,
+                                    CoconutType:value.CoconutType,
+                                    Region:value.Region,
+                                    Transporter:value.Transporter,
+                                    WarehouseLocation:value.WarehouseLocation,
+                                    ConveyorID:value.ConveyorID
+
+                                }
+                            })}
+                            columns={this._columns}
+                            setKey="set"
+                            layoutMode={DetailsListLayoutMode.justified}
+                            constrainMode={ConstrainMode.unconstrained}
+                            onRenderDetailsHeader={onRenderDetailsHeader}
+                            onActiveItemChanged={this.onActiveItemChanged}
+                        />
+                    </ScrollablePane>
+                    <div style={{width:'100%',height:'1px',backgroundColor:'#c5c5c5', marginTop:'10px'}}></div>
+                    <Label className='textContent'>Chi tiết lượt nhập hàng</Label>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList
-                            items={this.state.items}
-                            columns={this._columns}
+                            items={this.state.items2}
+                            columns={this._columns2}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}
                             constrainMode={ConstrainMode.unconstrained}

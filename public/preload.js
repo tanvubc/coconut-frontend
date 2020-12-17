@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
         backgroundColor: customTitlebar.Color.fromHex('#1C212E'),
         shadow:true,
         overflow:'hidden',
-        icon:'./logo192.png',
+        icon:'./logo.png',
         itemBackgroundColor:customTitlebar.Color.LIGHTGREY,
         
     });
