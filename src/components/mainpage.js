@@ -384,7 +384,7 @@ class MainPage extends Component {
                                     <Text  variant='mega'>{this.state.weight}</Text>
                                 </div>
                             </div>
-                        <img  src={this.props.url+"/api/stream/cameraview"} width={1000} height={600} style={{border:'0px'}}> 
+                        <img  src={this.props.url+"/api/stream/cameraview"} width={'auto'} height={'auto'} style={{border:'0px'}}> 
                         </img>
                     </div>
                     <div className="rightcontent">

@@ -25,30 +25,7 @@ class UserPage extends Component {
         this.state = {
             user:{username:'',name:'',role:''}, 
             items:[ 
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
+
             ], 
             itemsRender:''
         }
