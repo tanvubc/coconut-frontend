@@ -24,7 +24,7 @@ class NewImportSession extends Component {
             ConveyorID:undefined,
             Region:undefined,
             Transporter:undefined,
-            ImportCode:undefined
+            ImportCode:undefined,
 
         }
         
@@ -62,7 +62,7 @@ class NewImportSession extends Component {
             ConveyorID:this.state.ConveyorID,
             Region:this.state.Region,
             Transporter:this.state.Transporter,
-            ImportCode:this.state.ImportCode
+            ImportCode:this.state.ImportCode,
             }),{
             headers: {
             'Content-Type':'application/json',
@@ -91,10 +91,10 @@ class NewImportSession extends Component {
                     <ComboBox   className='inputbox' name='importer' label='Nhân viên thủ kho' options={this.state.users} selectedKey={this.state.importuserID}
                      onChange={(e,o)=>{this.setState({importuserID:o.key})}} useComboBoxAsMenuWidth  ></ComboBox>
                     <TextField   onChange={(e,v)=>{this.setState({Standard:v})}} className='inputbox' label='Tiêu chuẩn' name='standard'></TextField>
-                    <TextField  onChange={(e,v)=>{this.setState({CoconutType:v})}} className='inputbox' label='Loại dừa'></TextField>
+                    <TextField   onChange={(e,v)=>{this.setState({CoconutType:v})}} className='inputbox' label='Loại dừa'></TextField>
                     <TextField   onChange={(e,v)=>{this.setState({Transporter:v})}} className='inputbox' label='Đơn vị vận chuyển'></TextField>
                     <TextField   onChange={(e,v)=>{this.setState({Region:v})}} className='inputbox' label='Vùng'></TextField>
-                    <TextField  onChange={(e,v)=>{this.setState({WarehouseLocation:v})}} className='inputbox' label='Vị trí lưu kho'></TextField>
+                    <TextField   onChange={(e,v)=>{this.setState({WarehouseLocation:v})}} className='inputbox' label='Vị trí lưu kho'></TextField>
                   
                     <div style={{display:'flex',justifyContent:'center',marginTop:'20px'}}>
                     <PrimaryButton style={{margin:'4px'}} onClick={(e)=>this.handleSubmit(e)}>OK</PrimaryButton>
@@ -103,9 +103,6 @@ class NewImportSession extends Component {
                     </div>
                 </div> 
             </Modal> 
-    
-            
-            
             );
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './userpage.scss';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens, Label } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton, Stack, IStackTokens, Label, Modal } from 'office-ui-fabric-react';
 import { Text} from 'office-ui-fabric-react/lib/Text';
 import { IColumn,SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import {TextField, SearchBox} from '@fluentui/react'
@@ -15,7 +15,8 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { IDetailsColumnRenderTooltipProps } from 'office-ui-fabric-react/lib/DetailsList';
 import onRenderDetailsHeader from './renderheader'
-    
+import Newuser from './newuser'
+
 
 class UserPage extends Component {
     constructor(props) {
@@ -25,39 +26,16 @@ class UserPage extends Component {
         this.state = {
             user:{username:'',name:'',role:''}, 
             items:[ 
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
             ], 
-            itemsRender:''
+            itemsRender:[],
+           
         }
+        this._IDs=[];
         this._columns = [
+            { key: 'column0', name: 'STT', fieldName: 'key', minWidth: 100, maxWidth:130,  isResizable: true },
             { key: 'column1', name: 'Tên đăng nhập', fieldName: 'userName', minWidth: 100, maxWidth:130,  isResizable: true },
-            { key: 'column2', name: 'Họ', fieldName: 'firstName', minWidth: 100, maxWidth:130,  isResizable: true },
-            { key: 'column3', name: 'Tên', fieldName: 'lastName', minWidth: 100, maxWidth:130,  isResizable: true },
+            { key: 'column2', name: 'Họ và tên', fieldName: 'firstName', minWidth: 100, maxWidth:130,  isResizable: true },
             { key: 'column4', name: 'Quyền', fieldName: 'role', minWidth: 100, maxWidth:130, isResizable: true },
-            { key: 'column5', name: 'Trạng thái hoạt động', fieldName: 'activeStatus', minWidth: 140, maxWidth:200,  isResizable: true },
             { key: 'column6', name: 'Đăng nhập lần cuối', fieldName: 'lastLogin', minWidth: 130, maxWidth:200,  isResizable: true },
             { key: 'column7', name: 'Ngày tạo tài khoản', fieldName: 'createdDate', minWidth: 150, maxWidth:200,  isResizable: true },
 
@@ -69,6 +47,7 @@ class UserPage extends Component {
 
         this._selection = new Selection({
             onSelectionChanged: this._onItemsSelectionChanged,
+            id : null
           })
     }
     
@@ -96,12 +75,15 @@ class UserPage extends Component {
                         userName:value.Username,
                         lastLogin:value.LastLogin,
                         createdDate:value.DateCreated,
-                        role:value.Role.Name,
-                        firstName:value.Name
+                        role:value.Role.Name,   
+                        firstName:value.Name,
+                        ID: value.ID
                     }
                     )
                 })
+                
                 this.setState({items:userlist})
+                this.state.itemsRender = this.state.items
             }
            
       })
@@ -119,19 +101,34 @@ class UserPage extends Component {
         return(
         this.setState((prevState)=>{
             return(
-                {itemsRender: prevState.items.filter(item => item.lastName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
+                {itemsRender: prevState.items.filter(item => item.firstName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
             )
         }))
     }
     onRemoveRow(){
+        this._IDs = []
+        const _id = this.state.items.filter((item, index) => {
+            if (this._selection.isIndexSelected(index))
+            {
+              let list_ids = this._IDs
+              list_ids.push(item.ID)
+              this._IDs= list_ids
+            }
+             
+        })
+        for (var i =0; i< this._IDs.length;i++)
+        {
+            axios.get(this.props.url+'/api/user/deleteuser', 
+            {params: {id: this._IDs[i]}})
+        }
+        console.log(this._IDs.length)
         this.setState(prevState => {
             return {
                 items: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
-                itemsRender: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
+                itemsRender: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index))
             }
-        }) 
+        })
     }
-
     handleLogout(e){
         e.preventDefault();  
         axios.post(this.props.url+'/api/user/Logout','',{
@@ -149,7 +146,9 @@ class UserPage extends Component {
     render() {
         
         return ( 
+            
             <div className='userpage'>
+                {this.state.modalOpen?<Newuser url={this.props.url} onClose={(e)=>{e.preventDefault(); this.setState({modalOpen:false});}}></Newuser>:null}
                 <div className='navheader'>
                     <div className='leftHeader'>
                         <Label className='headerTitle'>
@@ -195,7 +194,11 @@ class UserPage extends Component {
                             <Icon iconName='Delete'/>
                         </PrimaryButton>
                         <div style={{paddingLeft:'20px'}}></div>
-                        <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
+                        {/* <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Add'/>
+                        </PrimaryButton>   */}
+                        
+                        <PrimaryButton text='Thêm'  onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}} style={{margin:'29px 0 0 0', width: '100px'}}>
                             <Icon iconName='Add'/>
                         </PrimaryButton>  
                     </div>

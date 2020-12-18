@@ -24,7 +24,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ipaddress:'192.168.0.12',
+      ipaddress:'localhost',
       showdiscovery:false, 
       listDevice:[]
      }
