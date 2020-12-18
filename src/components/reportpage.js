@@ -162,7 +162,7 @@ class ReportPage extends React.Component{
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
       componentDidMount(){
-        this.setState({searchEndTime: moment(Date.now()).format("YYYY-MM-DDTHH:MM:00.000")})
+        this.setState({searchEndTime: moment(Date.now()).add(1,'days').format("YYYY-MM-DDTHH:MM:00.000")})
         this.setState({searchStartTime: moment(Date.now()).subtract(10, 'days').format("YYYY-MM-DDTHH:MM:00.000")})
         axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
             this.setState({items:res.data})
@@ -267,7 +267,7 @@ class ReportPage extends React.Component{
                                     Region:value.Region,
                                     Transporter:value.Transporter,
                                     WarehouseLocation:value.WarehouseLocation,
-                                    ConveyorID:value.ConveyorID
+                                    ConveyorID:value.ConveyorID==0?'Băng tải 2':'Cả hai băng tải'
 
                                 }
                             })}

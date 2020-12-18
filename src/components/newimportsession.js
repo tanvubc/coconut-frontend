@@ -30,7 +30,7 @@ class NewImportSession extends Component {
         
         this.onUpdate = this.onUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.conveyoroption=[{key:0,text:'Băng tải 1'},{key:1,text:'Cả 2 băng tải'}]
+        this.conveyoroption=[{key:0,text:'Băng tải 2'},{key:1,text:'Cả 2 băng tải'}]
     }
     onUpdate(){
         axios.get(this.props.url+'/api/data/GetOperationUsers','',{
