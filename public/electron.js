@@ -6,6 +6,7 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const dgram = require('dgram');
 const {autoUpdater} = require("electron-updater");
+const PDFWindow = require('electron-pdf-window')
 let mainWindow;
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
@@ -77,6 +78,17 @@ function createWindow() {
   ipcMain.on('navigate',(event,message)=>{
     console.log(message)
     mainWindow.webContents.send('message',message)
+  })
+  ipcMain.on('openpdf',(event,message)=>{
+    const win = new PDFWindow({
+      width: 800,
+      height: 600,
+      title:message.title
+    })
+    win.menuBarVisible=false
+    win.loadURL(message.url)
+
+    
   })
 }
 //auto update
