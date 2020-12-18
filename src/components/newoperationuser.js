@@ -30,7 +30,7 @@ class NewOperationUser extends React.Component{
     render(){
         return(
             <Modal isOpen={true} style={{overflowY:'hidden'}}>
-                <div className='importdatabox' >
+                <div style={{ margin:'20px 20px 10px 20px'}} >
                     <h3 >Thêm nhân viên vận hành mới</h3>
                     <div style={{display:'flex',flexDirection:'column'}} >
                         <TextField onChange={(e,v)=>{this.setState({operationUserName:v})}} className='inputbox' label='Tên nhân viên' name='operationusername'></TextField>

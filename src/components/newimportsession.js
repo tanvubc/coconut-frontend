@@ -130,7 +130,7 @@ class NewImportSession extends Component {
                         <div style={{width:'100%',display:'flex',position:'absolute',bottom:'20px'}}>
                             <PrimaryButton style={{marginLeft:'auto',marginRight:'auto'}} onClick={(e)=>  {e.preventDefault(); this.setState({modalOpen:false})}}>OK</PrimaryButton>
                         </div>                 
-                </Modal>
+                    </Modal>
                 </div> 
             </Modal> 
     
