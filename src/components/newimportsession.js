@@ -105,12 +105,12 @@ class NewImportSession extends Component {
                     <TextField ref={(info)=>{this.info2=info}} onChange={(e,v)=>{this.setState({ImportCode:v})}} className='inputbox' label='Mã lô dừa'  name='username'></TextField>
                     <Stack horizontal='true'>
                         <ComboBox componentRef={(info)=>{this.info3=info}} className='inputbox' name='buyer' label='Nhân viên thu mua' options={this.state.users} selectedKey={this.state.buyeruserID}  
-                        onChange={(e,o)=>{this.setState({buyeruserID:o.key})}}  style={{width:'450px'}}  ></ComboBox>
+                        onChange={(e,o)=>{this.setState({buyeruserID:o.key})}}  style={{width:'470px'}} dropdownWidth={'470px'} ></ComboBox>
                         <IconButton iconProps={{iconName:'Add'}} style={{margin:'auto auto 0px auto'}} onClick={()=>{this.setState({modalNewOperationUserOpen:true})}}/>
                     </Stack>
                     <Stack horizontal='true'>
                         <ComboBox componentRef={(info)=>{this.info4=info}}  className='inputbox' name='importer' label='Nhân viên thủ kho' options={this.state.users} selectedKey={this.state.importuserID}  
-                        onChange={(e,o)=>{this.setState({importuserID:o.key})}}  style={{width:'450px'}}  ></ComboBox>
+                        onChange={(e,o)=>{this.setState({importuserID:o.key})}}  style={{width:'470px'}} dropdownWidth={'470px'} ></ComboBox>
                         <IconButton iconProps={{iconName:'Add'}} style={{margin:'auto auto 0px auto'}} onClick={()=>{this.setState({modalNewOperationUserOpen:true})}} />
                     </Stack>
                     <TextField ref={(info)=>{this.info5=info}} onChange={(e,v)=>{this.setState({Standard:v})}} className='inputbox' label='Tiêu chuẩn' name='standard'></TextField>
