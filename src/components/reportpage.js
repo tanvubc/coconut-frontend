@@ -62,7 +62,7 @@ class ReportPage extends React.Component{
                 WarehouseLocation: "",
                 Region: "",
                 ImportCode: "",
-                Transporter: ""
+                Transporter: ""          
             }], 
         }
         this.onSearchBox=this.onSearchBox.bind(this)

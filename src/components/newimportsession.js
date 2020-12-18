@@ -25,12 +25,12 @@ class NewImportSession extends Component {
             Region:undefined,
             Transporter:undefined,
             ImportCode:undefined,
-
+            VendorName: undefined
         }
         
         this.onUpdate = this.onUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.conveyoroption=[{key:0,text:'Băng tải 1'},{key:1,text:'Cả 2 băng tải'}]
+        this.conveyoroption=[{key:0,text:'Băng tải 2'},{key:1,text:'Cả 2 băng tải'}]
     }
     onUpdate(){
         axios.get(this.props.url+'/api/data/GetOperationUsers','',{
@@ -63,6 +63,7 @@ class NewImportSession extends Component {
             Region:this.state.Region,
             Transporter:this.state.Transporter,
             ImportCode:this.state.ImportCode,
+            VendorName: this.state.VendorName
             }),{
             headers: {
             'Content-Type':'application/json',
@@ -90,6 +91,8 @@ class NewImportSession extends Component {
                      onChange={(e,o)=>{this.setState({buyeruserID:o.key})}}  useComboBoxAsMenuWidth  ></ComboBox>
                     <ComboBox   className='inputbox' name='importer' label='Nhân viên thủ kho' options={this.state.users} selectedKey={this.state.importuserID}
                      onChange={(e,o)=>{this.setState({importuserID:o.key})}} useComboBoxAsMenuWidth  ></ComboBox>
+                    
+                    <TextField   onChange={(e,v)=>{this.setState({VendorName:v})}} className='inputbox' label='Nhà cung cấp' name='Nhà cung cấp'></TextField>
                     <TextField   onChange={(e,v)=>{this.setState({Standard:v})}} className='inputbox' label='Tiêu chuẩn' name='standard'></TextField>
                     <TextField   onChange={(e,v)=>{this.setState({CoconutType:v})}} className='inputbox' label='Loại dừa'></TextField>
                     <TextField   onChange={(e,v)=>{this.setState({Transporter:v})}} className='inputbox' label='Đơn vị vận chuyển'></TextField>
