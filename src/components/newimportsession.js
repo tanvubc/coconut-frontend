@@ -26,7 +26,7 @@ class NewImportSession extends Component {
             Region:undefined,
             Transporter:undefined,
             ImportCode:undefined,
-            VendorName: undefined
+            VendorName: undefined,
             modalNewOperationUserOpen:false,
             modalOpen:false
         }
