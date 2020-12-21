@@ -114,6 +114,7 @@ class NewImportSession extends Component {
                         onChange={(e,o)=>{this.setState({importuserID:o.key})}}  style={{width:'450px'}}  ></ComboBox>
                         <IconButton iconProps={{iconName:'Add'}} style={{margin:'auto auto 0px auto'}} onClick={()=>{this.setState({modalNewOperationUserOpen:true})}} />
                     </Stack>
+                    <TextField   onChange={(e,v)=>{this.setState({VendorName:v})}} className='inputbox' label='Nhà cung cấp' name='Nhà cung cấp'></TextField>
                     <TextField ref={(info)=>{this.info5=info}} onChange={(e,v)=>{this.setState({Standard:v})}} className='inputbox' label='Tiêu chuẩn' name='standard'></TextField>
                     <TextField ref={(info)=>{this.info6=info}} onChange={(e,v)=>{this.setState({CoconutType:v})}} className='inputbox' label='Loại dừa'></TextField>
                     <TextField ref={(info)=>{this.info7=info}}  onChange={(e,v)=>{this.setState({Transporter:v})}} className='inputbox' label='Đơn vị vận chuyển'></TextField>
