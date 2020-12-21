@@ -33,6 +33,7 @@ class MainPage extends Component {
             {key:6,name:'Đơn vị vận chuyển',value:2},
             {key:7,name:'Vùng',value:2},
             {key:8,name:'Vị trí lưu kho',value:2},
+            {key:9,name:'Nhà cung cấp',value:2},
         ],
         items2:[
             {key:1,name:'Lượt vận chuyển',value:2},
@@ -212,6 +213,7 @@ class MainPage extends Component {
                     {key:6,name:'Đơn vị vận chuyển',value:Response.data.Transporter},
                     {key:7,name:'Vùng',value:Response.data.Region},
                     {key:8,name:'Vị trí lưu kho',value:Response.data.WarehouseLocation},
+                    {key:9,name:'Nhà cung cấp',value:Response.data.VendorName},
                 ]
                 this.setState({items:importData})
             }

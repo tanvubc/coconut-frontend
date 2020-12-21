@@ -64,7 +64,7 @@ class ReportPage extends React.Component{
                 WarehouseLocation: "",
                 Region: "",
                 ImportCode: "",
-                Transporter: ""
+                Transporter: ""          
             }], 
             items2:[],
         }

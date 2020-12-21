@@ -26,14 +26,14 @@ class NewImportSession extends Component {
             Region:undefined,
             Transporter:undefined,
             ImportCode:undefined,
+            VendorName: undefined
             modalNewOperationUserOpen:false,
             modalOpen:false
-
         }
         
         this.onUpdate = this.onUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.conveyoroption=[{key:0,text:'Băng tải 1'},{key:1,text:'Cả 2 băng tải'}]
+        this.conveyoroption=[{key:0,text:'Băng tải 2'},{key:1,text:'Cả 2 băng tải'}]
     }
     onUpdate(){
         axios.get(this.props.url+'/api/data/GetOperationUsers','',{
@@ -77,7 +77,8 @@ class NewImportSession extends Component {
             ConveyorID:this.state.ConveyorID,
             Region:this.state.Region,
             Transporter:this.state.Transporter,
-            ImportCode:this.state.ImportCode
+            ImportCode:this.state.ImportCode,
+            VendorName: this.state.VendorName
             }),{
             headers: {
             'Content-Type':'application/json',
@@ -133,9 +134,6 @@ class NewImportSession extends Component {
                     </Modal>
                 </div> 
             </Modal> 
-    
-            
-            
             );
     }
 }
