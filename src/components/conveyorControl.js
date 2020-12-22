@@ -37,6 +37,14 @@ class ConveyorControl extends Component {
         }
         
     }
+    handleMaintenance(){
+        //this.setState({isload:false}) 
+        axios.get(this.props.url+'/api/plc/StartMaintenance').then((Response)=>{
+            this.setState({isload:false})
+        })
+         this.setState({isload:true})      
+        window.location.href='/#maintenance'
+    }
     render() { 
         return ( 
         <Modal isOpen={true}>
@@ -73,9 +81,10 @@ class ConveyorControl extends Component {
                 
                      
                     
-             
                 <div style={{ display:'flex',justifyContent:'center',marginBottom:'0px',marginTop:'20px'}}>
-                    
+                    <PrimaryButton style={{margin:'4px'}} onClick={(e)=>{e.preventDefault(); this.handleMaintenance()}}>Bảo trì</PrimaryButton>
+                </div>
+                <div style={{ display:'flex',justifyContent:'center',marginBottom:'0px',marginTop:'0px'}}>
                     <PrimaryButton style={{margin:'4px'}} onClick={(e)=>  {e.preventDefault(); this.props.onClose(e)}} >Đóng</PrimaryButton>
                 </div>
                
