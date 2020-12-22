@@ -74,7 +74,7 @@ class MaintenancePage extends Component {
                 <h2>Coconut counting system</h2>
 
                 <div className='maintenancebox'>
-                <h3>Bảo trì</h3>    
+                <h3>Chế độ thủ công</h3>    
                     <div className='buttonbox'>                                
                     <PrimaryButton className={this.state.Cv1IsRun? 'StopStatus' : 'RunStatus'} style={{margin:'4px'}} onClick={(e)=>{e.preventDefault();this.handleSelectCV1()}}>Băng tải 1</PrimaryButton>
                     <PrimaryButton className={this.state.Cv2IsRun? 'StopStatus' : 'RunStatus'} style={{margin:'4px'}} onClick={(e)=>{e.preventDefault();this.handleSelectCV2()}}>Băng tải 2</PrimaryButton>

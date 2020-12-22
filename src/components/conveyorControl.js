@@ -45,11 +45,32 @@ class ConveyorControl extends Component {
          this.setState({isload:true})      
         window.location.href='/#maintenance'
     }
+
+    handleStartConveyor(e){
+        e.preventDefault()
+        axios.get(this.props.url+'/api/inspection/continue',{
+            headers: {
+            'Content-Type':'application/json',
+            "Access-Control-Allow-Origin": "*"
+            }
+        })
+        
+    }
+    handleStopConveyor(e){
+        e.preventDefault()
+        axios.get(this.props.url+'/api/inspection/pause',{
+            headers: {
+            'Content-Type':'application/json',
+            "Access-Control-Allow-Origin": "*"
+            }
+        })
+    }
+
     render() { 
         return ( 
         <Modal isOpen={true}>
             <div className='conveyorBox' >
-                <h3 >Điều khiển băng tải</h3>
+                <h3 >Điều khiển hệ thống</h3>
                 <div style={{marginTop:'10px'}}>
                     {this.state.isload?
                     (
@@ -58,31 +79,26 @@ class ConveyorControl extends Component {
                 
                 <Stack tokens={{childrenGap:12}} horizontal style={{alignItems:'center'}}>
                     <div>
-                    Băng tải 1
+                    Hệ thống
                     </div>
                     
-                <PrimaryButton  iconProps={{iconName:'Play'}} filled text='Chạy' onClick={(e)=>{e.preventDefault(); this.handleStart(1)}} >
-               
+                <PrimaryButton  iconProps={{iconName:'Play'}} filled text='Tiếp tục' onClick={(e)=>{e.preventDefault(); this.handleStartConveyor()}} >
                 </PrimaryButton>
-                <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStop(1)}} ></PrimaryButton>
+                <PrimaryButton iconProps={{iconName:'Stop'}} text='Tạm dừng' onClick={(e)=>{e.preventDefault(); this.handleStopConveyor()}} ></PrimaryButton>
                 </Stack>
-                <Stack tokens={{childrenGap:12}} horizontal style={{alignItems:'center'}}>
+                {/* <Stack tokens={{childrenGap:12}} horizontal style={{alignItems:'center'}}>
                     <div>
                     Băng tải 2
                     </div>
                     
                 <PrimaryButton iconProps={{iconName:'Play'}} filled text='Chạy' onClick={(e)=>{e.preventDefault(); this.handleStart(2)}} ></PrimaryButton>
                 <PrimaryButton iconProps={{iconName:'Stop'}} text='Dừng' onClick={(e)=>{e.preventDefault(); this.handleStop(2)}} ></PrimaryButton>
-                </Stack>
+                </Stack> */}
                 </Stack>
                 }
-                </div>
-                
-                
-                     
-                    
+                </div>      
                 <div style={{ display:'flex',justifyContent:'center',marginBottom:'0px',marginTop:'20px'}}>
-                    <PrimaryButton style={{margin:'4px'}} onClick={(e)=>{e.preventDefault(); this.handleMaintenance()}}>Bảo trì</PrimaryButton>
+                    <PrimaryButton style={{margin:'4px'}} onClick={(e)=>{e.preventDefault(); this.handleMaintenance()}}>Chế độ thủ công</PrimaryButton>
                 </div>
                 <div style={{ display:'flex',justifyContent:'center',marginBottom:'0px',marginTop:'0px'}}>
                     <PrimaryButton style={{margin:'4px'}} onClick={(e)=>  {e.preventDefault(); this.props.onClose(e)}} >Đóng</PrimaryButton>
