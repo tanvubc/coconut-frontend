@@ -254,25 +254,25 @@ class MainPage extends Component {
         })
        
     }
-    handleStartConveyor(e){
-        e.preventDefault()
-        axios.get(this.props.url+'/api/inspection/continue',{
-            headers: {
-            'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*"
-            }
-        })
+    // handleStartConveyor(e){
+    //     e.preventDefault()
+    //     axios.get(this.props.url+'/api/inspection/continue',{
+    //         headers: {
+    //         'Content-Type':'application/json',
+    //         "Access-Control-Allow-Origin": "*"
+    //         }
+    //     })
         
-    }
-    handleStopConveyor(e){
-        e.preventDefault()
-        axios.get(this.props.url+'/api/inspection/pause',{
-            headers: {
-            'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*"
-            }
-        })
-    }
+    // }
+    // handleStopConveyor(e){
+    //     e.preventDefault()
+    //     axios.get(this.props.url+'/api/inspection/pause',{
+    //         headers: {
+    //         'Content-Type':'application/json',
+    //         "Access-Control-Allow-Origin": "*"
+    //         }
+    //     })
+    // }
     render() { 
         return ( 
             <div className='mainlayout'>
@@ -284,12 +284,12 @@ class MainPage extends Component {
                         <div className='headerButtonText' onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}}>
                             Nhập kho mới
                         </div>
-                        <div className='headerButtonText' onClick={(e)=>this.handleStartConveyor(e)} >
+                        {/* <div className='headerButtonText' onClick={(e)=>this.handleStartConveyor(e)} >
                             Chạy băng tải
                         </div>
                         <div className='headerButtonText' onClick={(e)=>this.handleStopConveyor(e)} >
                             Dừng băng tải
-                        </div>
+                        </div> */}
                     </div>
                     <div className='centerHeader'>
                         <div className=  {this.state.conveyor1?"statusboxactive":"statusbox"}>

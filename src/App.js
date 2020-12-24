@@ -15,6 +15,7 @@ import {
   Switch
 } from "react-router-dom";
 import RegisterPage from './components/registerpage';
+import MaintenancePage from './components/maintenance';
 import axios from 'axios';
 import React, { Component } from 'react';
 const Store = window.require('electron-store');
@@ -69,6 +70,8 @@ class App extends Component {
             <Route   path="/report"  render={(props) => <ReportPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
             </Route>
             <Route   path="/user" render={(props) => <UserPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+            <Route   path="/maintenance" render={(props) => <MaintenancePage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
             </Route>
           </Switch>
         </HashRouter>
