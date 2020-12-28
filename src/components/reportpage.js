@@ -65,7 +65,7 @@ class ReportPage extends React.Component{
                 WarehouseLocation: "",
                 Region: "",
                 ImportCode: "",
-                Transporter: ""
+                Transporter: ""          
             }], 
             items2:[],
         }
@@ -108,6 +108,7 @@ class ReportPage extends React.Component{
             { key: 'column6', name: 'Đơn vị vận chuyển', fieldName: 'Transporter', minWidth: 140,  isResizable: true },
             { key: 'column7', name: 'Vị trí lưu kho', fieldName: 'WarehouseLocation', minWidth: 140,  isResizable: true },
             { key: 'column8', name: 'Băng tải lên dừa', fieldName: 'ConveyorID', minWidth: 140,  isResizable: true },
+            { key: 'column10', name: 'Thời điểm bắt đầu', fieldName: 'Date', minWidth: 140, maxWidth:160, isResizable: true },
         ];
         this._columns2 = [
 
@@ -172,7 +173,6 @@ class ReportPage extends React.Component{
             this.setState({items:res.data})
             // console.log(this.state.items)
         })
-        
       }
       handleImportExportPDF(){
         window.ipcRenderer.send('openpdf',{url:this.props.url+'/api/report/GetImportReportpdf?id='+this._selection.getSelection()[0].ID,title:'Báo cáo nhập hàng'})

@@ -29,28 +29,59 @@ class RegisterPage extends Component {
         event.preventDefault();
         const formdata= new FormData();
         formdata.set('data','data')
-        axios.post(this.props.url+'/api/user/CreateUser',JSON.stringify({
-            username:event.target.username.value,
-            fullname:event.target.fullname.value,
-            password:event.target.password1.value
-            }),{
-            headers: {
-            'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*",
-            'Authorization':auth,
-            }
-        }).then((Response)=>{
-            if (Response.data.Result)
-            {
-                this.props.history.push('/login')
-            }
-            else{
-                this.setState({
-                    modalOpen:true,
-                    modalMessage:Response.data.Message
-                })
-            }
-        })
+        if(this.infoname.value ==="")
+        {
+            this.setState({ 
+                modalOpen:true,
+                modalMessage:'Vui lòng nhập tên đăng nhập'
+             })
+        }
+        else if(this.infofullname.value ==="")
+        {
+            this.setState({ 
+                modalOpen:true,
+                modalMessage:'Vui lòng nhập họ và tên'
+             })
+        }
+        else if (this.info1.value === "")
+        {
+            this.setState({ 
+                modalOpen:true,
+                modalMessage:'Vui lòng nhập mật khẩu'
+             })
+        }
+        else if(this.info1.value !== this.info2.value )
+        {
+            this.setState({ 
+                modalOpen:true,
+                modalMessage:'Mật khẩu không trùng khớp'
+             })
+        }
+        else
+        {
+            axios.post(this.props.url+'/api/user/CreateUser',JSON.stringify({
+                username:event.target.username.value,
+                fullname:event.target.fullname.value,
+                password:event.target.password1.value
+                }),{
+                headers: {
+                'Content-Type':'application/json',
+                "Access-Control-Allow-Origin": "*",
+                'Authorization':auth
+                }
+            }).then((Response)=>{
+                if (Response.data.Result)
+                {
+                    this.props.history.push('/login')
+                }
+                else{
+                    this.setState({
+                        modalOpen:true,
+                        modalMessage:Response.data.Message
+                    })
+                }
+            })
+        }
       }
     handleClick(){
         axios.post(this.props.url+'/api/user/CreateUser',"asd",{
@@ -80,10 +111,10 @@ class RegisterPage extends Component {
                 <div className='loginbox'>
                     <h3>Register</h3>
                     <form style={{alignItems:'center',display:'flex',flexDirection:'column'}} onSubmit={this.handleSubmit}>
-                    <TextField  style={{textAlign:'center'}} className='inputbox' label='Tên đăng nhập' placeholder='Tên đăng nhập mới' name='username'></TextField>
-                    <TextField  style={{textAlign:'center'}} className='inputbox' label='Họ và tên' name='fullname'></TextField>
-                    <TextField style={{textAlign:'center'}} className='inputbox' type='password' label='Mật khẩu' placeholder='Mật khẩu' name='password1'></TextField>
-                    <TextField style={{textAlign:'center'}} className='inputbox' type='password' placeholder='Nhập lại khẩu' name='password2'></TextField>
+                    <TextField ref = {info => {this.infoname = info}} style={{textAlign:'center'}} className='inputbox' label='Tên đăng nhập' placeholder='Tên đăng nhập mới' name='username'></TextField>
+                    <TextField ref = {info => {this.infofullname = info}} style={{textAlign:'center'}} className='inputbox' label='Họ và tên' name='fullname'></TextField>
+                    <TextField ref = {info => {this.info1 = info}} style={{textAlign:'center'}} className='inputbox' type='password' label='Mật khẩu' placeholder='Mật khẩu' name='password1'></TextField>
+                    <TextField ref = {info => {this.info2 = info}} style={{textAlign:'center'}} className='inputbox' type='password' placeholder='Nhập lại khẩu' name='password2'></TextField>
                    
                     <PrimaryButton style={{marginTop:'20px'}} type="submit" >Tạo tài khoản</PrimaryButton>
                     </form>

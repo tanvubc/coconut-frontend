@@ -74,8 +74,8 @@ class Newuser extends Component {
                 }),{
                 headers: {
                 'Content-Type':'application/json',
-                "Access-Control-Allow-Origin": "*",
-                'Authorization':auth
+                'Authorization':auth,
+                "Access-Control-Allow-Origin": "*"
                 }
             }).then((Response)=>{
                 if (Response.data.Result)

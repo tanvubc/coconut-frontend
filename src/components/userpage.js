@@ -56,7 +56,6 @@ class UserPage extends Component {
                 this._IDs = items.map(item=>{return(item.ID)})
           }
         })
-        
     }
     onUpdate(){
         axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
@@ -151,7 +150,6 @@ class UserPage extends Component {
         // })
         // console.log(this._IDs)
     }
-
     handleLogout(e){
         e.preventDefault();  
         axios.post(this.props.url+'/api/user/Logout','',{
@@ -232,6 +230,14 @@ class UserPage extends Component {
                         <PrimaryButton text = 'Xóa' onClick={this.onRemoveRow} style={{margin:'29px 0 0 0', width: '100px'}}>
                             <Icon iconName='Delete'/>
                         </PrimaryButton>
+                        <div style={{paddingLeft:'20px'}}></div>
+                        {/* <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Add'/>
+                        </PrimaryButton>   */}
+                        
+                        <PrimaryButton text='Thêm'  onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}} style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Add'/>
+                        </PrimaryButton>  
                     </div>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList

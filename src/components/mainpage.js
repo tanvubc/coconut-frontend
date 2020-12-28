@@ -34,6 +34,7 @@ class MainPage extends Component {
             {key:6,name:'Đơn vị vận chuyển',value:2},
             {key:7,name:'Vùng',value:2},
             {key:8,name:'Vị trí lưu kho',value:2},
+            {key:9,name:'Nhà cung cấp',value:2},
         ],
         items2:[
             {key:1,name:'Lượt vận chuyển',value:2},
@@ -214,6 +215,7 @@ class MainPage extends Component {
                     {key:6,name:'Đơn vị vận chuyển',value:Response.data.Transporter},
                     {key:7,name:'Vùng',value:Response.data.Region},
                     {key:8,name:'Vị trí lưu kho',value:Response.data.WarehouseLocation},
+                    {key:9,name:'Nhà cung cấp',value:Response.data.VendorName},
                 ]
                 this.setState({items:importData})
             }
@@ -254,25 +256,25 @@ class MainPage extends Component {
         })
        
     }
-    handleStartConveyor(e){
-        e.preventDefault()
-        axios.get(this.props.url+'/api/inspection/continue',{
-            headers: {
-            'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*"
-            }
-        })
+    // handleStartConveyor(e){
+    //     e.preventDefault()
+    //     axios.get(this.props.url+'/api/inspection/continue',{
+    //         headers: {
+    //         'Content-Type':'application/json',
+    //         "Access-Control-Allow-Origin": "*"
+    //         }
+    //     })
         
-    }
-    handleStopConveyor(e){
-        e.preventDefault()
-        axios.get(this.props.url+'/api/inspection/pause',{
-            headers: {
-            'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*"
-            }
-        })
-    }
+    // }
+    // handleStopConveyor(e){
+    //     e.preventDefault()
+    //     axios.get(this.props.url+'/api/inspection/pause',{
+    //         headers: {
+    //         'Content-Type':'application/json',
+    //         "Access-Control-Allow-Origin": "*"
+    //         }
+    //     })
+    // }
     render() { 
         return ( 
             <div className='mainlayout'>
@@ -284,12 +286,12 @@ class MainPage extends Component {
                         <div className='headerButtonText' onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}}>
                             Nhập kho mới
                         </div>
-                        <div className='headerButtonText' onClick={(e)=>this.handleStartConveyor(e)} >
+                        {/* <div className='headerButtonText' onClick={(e)=>this.handleStartConveyor(e)} >
                             Chạy băng tải
                         </div>
                         <div className='headerButtonText' onClick={(e)=>this.handleStopConveyor(e)} >
                             Dừng băng tải
-                        </div>
+                        </div> */}
                     </div>
                     <div className='centerHeader'>
                         <div className=  {this.state.conveyor1?"statusboxactive":"statusbox"}>
@@ -386,7 +388,7 @@ class MainPage extends Component {
                                     <Text  variant='mega'>{this.state.weight}</Text>
                                 </div>
                             </div>
-                        <img  src={this.props.url+"/api/stream/cameraview"} width={1000} height={600} style={{border:'0px'}}> 
+                        <img  src={this.props.url+"/api/stream/cameraview"} width={'auto'} height={'auto'} style={{border:'0px'}}> 
                         </img>
                     </div>
                     <div className="rightcontent">

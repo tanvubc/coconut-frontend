@@ -15,6 +15,7 @@ import {
   Switch
 } from "react-router-dom";
 import RegisterPage from './components/registerpage';
+import MaintenancePage from './components/maintenance';
 import axios from 'axios';
 import React, { Component } from 'react';
 
@@ -55,29 +56,28 @@ class App extends Component {
   render() { 
     return ( 
       <div>
-        {this.state.showdiscovery?<Modal isOpen={true}>
+        {this.state.showdiscovery?
+        <Modal isOpen={true}>
             <DiscoveryPage onAddDevice={(devices)=>this.handleAddDevice(devices)} onclose={()=>{this.setState({showdiscovery:false})}}></DiscoveryPage>
         </Modal>:null}
         <HashRouter ref={this.routeref}>
-        <Switch>
-        <Route exact   path="/" render={(props) => <MainPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>       
-        </Route>
-        <Route   path="/login"  render={(props) => <LoginPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
-        </Route>
-        <Route   path="/register"  render={(props) => <RegisterPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
-        </Route>
-        <Route   path="/report"  render={(props) => <ReportPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
-        </Route>
-        <Route   path="/user" render={(props) => <UserPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
-        </Route>
-        </Switch>
-
-        
-      </HashRouter>
+          <Switch>
+            <Route exact   path="/" render={(props) => <MainPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>       
+            </Route>
+            <Route   path="/login"  render={(props) => <LoginPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+            <Route   path="/register"  render={(props) => <RegisterPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+            <Route   path="/report"  render={(props) => <ReportPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+            <Route   path="/user" render={(props) => <UserPage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+            <Route   path="/maintenance" render={(props) => <MaintenancePage url={'http://'+this.state.ipaddress+':9000'} {...props}/>}>
+            </Route>
+          </Switch>
+        </HashRouter>
       </div>
-      
-
-     );
+    );
   }
 }
 
