@@ -13,6 +13,7 @@ import { IDetailsColumnRenderTooltipProps } from 'office-ui-fabric-react/lib/Det
 import onRenderDetailsHeader from './renderheader'
 import axios from 'axios'
 import moment from 'moment'
+import myStore from './myStore'
 
 const DayPickerStrings = {
     months: ['January','February','March','April','May','June','July','August','September','October','November','December',],
@@ -43,7 +44,7 @@ const classNames = mergeStyleSets({
       margin: 'auto',
     }
   });
-
+const auth = 'bearer '+Object.values(myStore.state).join('')
 
 class ReportPage extends React.Component{
     constructor(){
@@ -85,7 +86,7 @@ class ReportPage extends React.Component{
                 const ImportID = items.map(item=>{return(item.ID)})
                 var id
                 for (id in ImportID){
-                    axios.get(this.props.url+'/api/data/getTransportSessionbyImportID', {params: {ImportID: ImportID[id]}}).then(res=>{
+                    axios.get(this.props.url+'/api/data/getTransportSessionbyImportID',{headers:{'Authorization': auth}, params: {ImportID: ImportID[id]}}).then(res=>{
                         data.push.apply(data,res.data)    
                     })
                     
@@ -117,6 +118,7 @@ class ReportPage extends React.Component{
             { key: 'column4', name: 'Thời gian bắt đầu', fieldName: 'StartTime', minWidth: 140, maxWidth: 160, isResizable: true },
             { key: 'column5', name: 'Thời gian kết thúc', fieldName: 'EndTime', minWidth: 140, maxWidth: 160, isResizable: true },
         ];
+        
     }
     onSelectDateBegin(dateBegin){
         dateBegin = moment(dateBegin).format("YYYY-MM-DDTHH:MM:SS.SSS")
@@ -132,12 +134,12 @@ class ReportPage extends React.Component{
     }
     onSearchBox(_,text){
         if (text==""){
-            axios.get(this.props.url+'/api/data/get10daysimportsessions').then(res=>{
+            axios.get(this.props.url+'/api/data/get10daysimportsessions',{headers:{'Authorization': auth}}).then(res=>{
               this.setState({items:res.data})
             })
         } else {
             axios.get(this.props.url+'/api/data/getsearchbyname', 
-                {params: {searchType: this.state.searchType, searchWhat: text, searchStartTime: this.state.searchStartTime, searchEndTime: this.state.searchEndTime}}).then(res=>
+                {headers:{'Authorization': auth},params: {searchType: this.state.searchType, searchWhat: text, searchStartTime: this.state.searchStartTime, searchEndTime: this.state.searchEndTime}}).then(res=>
                 this.setState({items:res.data})
             )
         }
@@ -161,12 +163,14 @@ class ReportPage extends React.Component{
         { key: 'Transporter', text: 'Đơn vị vận chuyển' },
         { key: 'WarehouseLocation', text: 'Vị trí lưu kho'},
       ];
-      componentDidMount(){
+    componentDidMount(){
+        
+        // console.log(auth)
         this.setState({searchEndTime: moment(Date.now()).add(1,'days').format("YYYY-MM-DDTHH:MM:00.000")})
         this.setState({searchStartTime: moment(Date.now()).subtract(10, 'days').format("YYYY-MM-DDTHH:MM:00.000")})
-        axios.get('http://localhost:9000/api/data/get10daysimportsessions').then(res=>{
+        axios.get('http://localhost:9000/api/data/get10daysimportsessions',{headers:{'Authorization': auth}}).then(res=>{
             this.setState({items:res.data})
-            console.log(this.state.items)
+            // console.log(this.state.items)
         })
         
       }

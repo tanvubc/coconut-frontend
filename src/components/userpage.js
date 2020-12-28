@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './userpage.scss';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens, Label } from 'office-ui-fabric-react';
+import { DefaultButton, PrimaryButton, Stack, IStackTokens, Label, Modal } from 'office-ui-fabric-react';
 import { Text} from 'office-ui-fabric-react/lib/Text';
 import { IColumn,SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import {TextField, SearchBox} from '@fluentui/react'
@@ -15,49 +15,29 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { IDetailsColumnRenderTooltipProps } from 'office-ui-fabric-react/lib/DetailsList';
 import onRenderDetailsHeader from './renderheader'
-    
+import Newuser from './newuser'
+import NewRole from './newrole'
+import myStore from './myStore'
+const auth = 'bearer '+Object.values(myStore.state).join('')
+
 
 class UserPage extends Component {
     constructor(props) {
 
-        super(props);
-        
+        super(props);    
         this.state = {
             user:{username:'',name:'',role:''}, 
             items:[ 
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:1,userName:'tanvubc',firstName:'Nguyen',lastName:'Tan Vu',role:'Administrator',
-                activeStatus:'Online',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:2,userName:'nhatminhtamky',firstName:'Nguyen',lastName:'Huu Nhat Minh',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
-                {key:3,userName:'acanus',firstName:'Trinh',lastName:'Dinh Nam',role:'Administrator',
-                activeStatus:'Offline',lastLogin:'04/12/2020',createdDate:'04/12/2020'},
             ], 
-            itemsRender:''
+            itemsRender:[],
+            IDs:[],
         }
+        this._IDs=[];
         this._columns = [
+            { key: 'column0', name: 'STT', fieldName: 'key', minWidth: 100, maxWidth:130,  isResizable: true },
             { key: 'column1', name: 'Tên đăng nhập', fieldName: 'userName', minWidth: 100, maxWidth:130,  isResizable: true },
-            { key: 'column2', name: 'Họ', fieldName: 'firstName', minWidth: 100, maxWidth:130,  isResizable: true },
-            { key: 'column3', name: 'Tên', fieldName: 'lastName', minWidth: 100, maxWidth:130,  isResizable: true },
+            { key: 'column2', name: 'Họ và tên', fieldName: 'firstName', minWidth: 100, maxWidth:130,  isResizable: true },
             { key: 'column4', name: 'Quyền', fieldName: 'role', minWidth: 100, maxWidth:130, isResizable: true },
-            { key: 'column5', name: 'Trạng thái hoạt động', fieldName: 'activeStatus', minWidth: 140, maxWidth:200,  isResizable: true },
             { key: 'column6', name: 'Đăng nhập lần cuối', fieldName: 'lastLogin', minWidth: 130, maxWidth:200,  isResizable: true },
             { key: 'column7', name: 'Ngày tạo tài khoản', fieldName: 'createdDate', minWidth: 150, maxWidth:200,  isResizable: true },
 
@@ -66,19 +46,25 @@ class UserPage extends Component {
         this.onUserNameTextChange=this.onUserNameTextChange.bind(this)
         this.onFirstNameTextChange=this.onFirstNameTextChange.bind(this)
         this.state.itemsRender=this.state.items
+        this.onSelectIDs = this.onSelectIDs.bind(this)
+        this.onUpdate = this.onUpdate.bind(this)
 
         this._selection = new Selection({
-            onSelectionChanged: this._onItemsSelectionChanged,
-          })
+            onSelectionChanged: () => {
+                const data = []
+                const items = this._selection.getSelection()
+                this._IDs = items.map(item=>{return(item.ID)})
+          }
+        })
+        
     }
-    
-    componentDidMount(){
+    onUpdate(){
         axios.get(this.props.url+'/api/user/IsLogin').then((Response)=>{
             if (Response.data){
                 axios.get(this.props.url+'/api/user/CurrentUser').then((Respone1)=>{
                     if(Respone1.data)
                     {
-                        console.log(Respone1.data)
+                        // console.log(Respone1.data)
                         this.setState({user:{username:Respone1.data.username,name:Respone1.data.name,role:Respone1.data.role.Name}})
                     }
                 })
@@ -87,7 +73,7 @@ class UserPage extends Component {
                 window.location.href='/#/login'
             }
       })
-      axios.get(this.props.url+'/api/user/GetUserList').then((Response)=>{
+      axios.get(this.props.url+'/api/user/GetUserList',{headers:{'Authorization':auth}}).then((Response)=>{
             if (Response.data){
                 const userlist= Response.data.map((value,index)=>{
                     return (
@@ -96,17 +82,22 @@ class UserPage extends Component {
                         userName:value.Username,
                         lastLogin:value.LastLogin,
                         createdDate:value.DateCreated,
-                        role:value.Role.Name,
-                        firstName:value.Name
+                        role:value.Role.Name,   
+                        firstName:value.Name,
+                        ID: value.ID
                     }
                     )
                 })
-                this.setState({items:userlist})
+                
+                this.setState({items:userlist, itemsRender: userlist})
             }
            
       })
-
     }
+    componentDidMount(){
+        this.onUpdate();
+    }
+
     onUserNameTextChange(_,text) {
         return(
         this.setState((prevState)=>{
@@ -119,17 +110,46 @@ class UserPage extends Component {
         return(
         this.setState((prevState)=>{
             return(
-                {itemsRender: prevState.items.filter(item => item.lastName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
+                {itemsRender: prevState.items.filter(item => item.firstName.toLowerCase().indexOf(text.toLowerCase()) >= 0)}
             )
         }))
     }
     onRemoveRow(){
+        // this._IDs = []
+        // const _id = this.state.items.filter((item, index) => {
+        //     if (this._selection.isIndexSelected(index))
+        //     {
+        //       let list_ids = this._IDs
+        //       list_ids.push(item.ID)
+        //       this._IDs= list_ids
+        //     }
+             
+        // })
+        for (var i =0; i< this._IDs.length;i++)
+        {        
+            axios.get(this.props.url+'/api/user/deleteuser', 
+            {params: {id: this._IDs[i]}})
+        }
         this.setState(prevState => {
             return {
                 items: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
-                itemsRender: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index)),
+                itemsRender: prevState.items.filter((item, index) => !this._selection.isIndexSelected(index))
             }
-        }) 
+        })
+    }
+    onSelectIDs(){
+        // this._IDs = []
+        // const _id = this.state.items.filter((item, index) => {
+        //     if (this._selection.isIndexSelected(index))
+        //     {
+        //       let list_ids = this._IDs
+        //       list_ids.push(item.ID)
+        //       console.log(item.ID)
+        //       this._IDs= list_ids
+        //     }
+             
+        // })
+        // console.log(this._IDs)
     }
 
     handleLogout(e){
@@ -137,7 +157,8 @@ class UserPage extends Component {
         axios.post(this.props.url+'/api/user/Logout','',{
             headers: {
             'Content-Type':'application/json',
-            "Access-Control-Allow-Origin": "*"
+            "Access-Control-Allow-Origin": "*",
+            "Authorization":auth
             }
         })
         window.location.href='/#/login'
@@ -146,14 +167,19 @@ class UserPage extends Component {
         alert(`Item invoked: ${item.name}`);
       };
     
+
     render() {
         
         return ( 
+            
             <div className='userpage'>
+
+                {this.state.isSetRole?<NewRole IDs = {this._IDs} url={this.props.url} onClose={(e)=>{e.preventDefault(); this.setState({isSetRole:false}); this.onUpdate()}}></NewRole>:null}
+                {this.state.modalOpen?<Newuser url={this.props.url} onClose={(e)=>{e.preventDefault(); this.setState({modalOpen:false})}}></Newuser>:null}
                 <div className='navheader'>
                     <div className='leftHeader'>
                         <Label className='headerTitle'>
-                            Quản lý người dùng
+                            Quản lý người dùng  
                         </Label>
                     </div>
                     <div className="rightHeader">
@@ -190,19 +216,27 @@ class UserPage extends Component {
                         <TextField label="Tên:" onChange={this.onFirstNameTextChange} placeholder='vd: Văn A' />
                         <div style={{paddingLeft:'20px'}}></div>
                    
+                        <PrimaryButton text='Phân quyền'  onClick={(e)=> {e.preventDefault(); this.setState({isSetRole:true})}} style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Edit'/>
+                        </PrimaryButton>  
+              
+                        <div style={{paddingLeft:'20px'}}></div>
+                        {/* <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Add'/>
+                        </PrimaryButton>   */}
                         
+                        <PrimaryButton text='Thêm'  onClick={(e)=> {e.preventDefault(); this.setState({modalOpen:true})}} style={{margin:'29px 0 0 0', width: '100px'}}>
+                            <Icon iconName='Add'/>
+                        </PrimaryButton>  
+                        <div style={{paddingLeft:'20px'}}></div>
                         <PrimaryButton text = 'Xóa' onClick={this.onRemoveRow} style={{margin:'29px 0 0 0', width: '100px'}}>
                             <Icon iconName='Delete'/>
                         </PrimaryButton>
-                        <div style={{paddingLeft:'20px'}}></div>
-                        <PrimaryButton text='Thêm' href='/#register' style={{margin:'29px 0 0 0', width: '100px'}}>
-                            <Icon iconName='Add'/>
-                        </PrimaryButton>  
                     </div>
                     <ScrollablePane className='pane' scrollbarVisibility={ScrollbarVisibility.auto}>
                         <DetailsList
                             selection={this._selection}
-                            items={this.state.itemsRender}
+                            items={this.state.items}
                             columns={this._columns}
                             setKey="set"
                             layoutMode={DetailsListLayoutMode.justified}

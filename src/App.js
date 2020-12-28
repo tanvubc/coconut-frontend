@@ -17,6 +17,7 @@ import {
 import RegisterPage from './components/registerpage';
 import axios from 'axios';
 import React, { Component } from 'react';
+
 const Store = window.require('electron-store');
 const store = new Store();
 const loadedDevice= store.get('deviceList');
